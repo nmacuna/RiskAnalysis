@@ -26,7 +26,7 @@ def plot_scatter(x, y):
     return fig
 
 def main():
-    st.title("Confiabilidad y análisis de riesgo  Correlation Explorer")
+    st.title("Confiabilidad y análisis de riesgo  Visualizador de correlación")
 
     # Banner image
     banner_image = Image.open("Confiabilidad_imagen.jpeg")
