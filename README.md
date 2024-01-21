@@ -1,3 +1,3 @@
 # RiskAnalysis
 
-Para acceder a la herramienta haga clic acá: 
+Para acceder a la herramienta de correlación básica haga clic acá: 
