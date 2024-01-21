@@ -8,7 +8,8 @@ Created on Sun Jan 21 15:43:45 2024
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image  # Pillow library for working with images
+from PIL import Image
+from scipy.stats import linregress  # Importa linregress desde scipy.stats
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
     cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
@@ -17,12 +18,27 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
     x, y = np.random.multivariate_normal(mean, cov, size).T
     return x, y
 
-def plot_scatter(x, y):
+def plot_scatter_with_regression(x, y):
     fig, ax = plt.subplots()
+
+    # Scatter plot
     ax.scatter(x, y, alpha=0.5)
     ax.set_title('Generación de datos')
+
+    # Regresión lineal
+    slope, intercept, r_value, p_value, std_err = linregress(x, y)
+    line = slope * x + intercept
+    ax.plot(x, line, color='red', label=f'Regresión lineal: y = {slope:.2f}x + {intercept:.2f}')
+
+    # Coeficiente de determinación (r^2)
+    r_squared = r_value**2
+    ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
+
+    # Etiquetas y leyenda
     ax.set_xlabel('Variable X')
     ax.set_ylabel('Variable Y')
+    ax.legend()
+
     return fig
 
 def main():
@@ -43,8 +59,8 @@ def main():
     data_size = 100
     x_data, y_data = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot the scatter plot
-    fig = plot_scatter(x_data, y_data)
+    # Plot the scatter plot with regression line and r^2
+    fig = plot_scatter_with_regression(x_data, y_data)
     st.pyplot(fig)
 
 if __name__ == "__main__":
