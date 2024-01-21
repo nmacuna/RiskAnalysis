@@ -22,11 +22,13 @@ def plot_probability_distribution(distribution, params, title):
     return fig
 
 def main():
-    st.title("Probability Distribution Explorer")
 
     # Banner image
-    banner_image = Image.open("path/to/your/image.jpg")  # Replace with the actual path to your image
+    banner_image = Image.open("Confiabilidad_imagen.jpg")
     st.image(banner_image, use_column_width=True)
+
+    st.title("Confiabilidad y análisis de riesgo  Visualizador de distribuciones de probabilidad")
+
 
     # Sidebar for user input
     distribution_type = st.sidebar.selectbox("Select Distribution", ["Exponential", "Lognormal", "Normal"])
