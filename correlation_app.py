@@ -10,9 +10,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image  # Pillow library for working with images
 
-def generate_correlated_data(size, correlation):
-    mean = [0, 0]
-    cov = [[1, correlation], [correlation, 1]]
+def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
+    cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
+                    [correlation * std_dev_x * std_dev_y, std_dev_y**2]])
+    mean = [mean_x, mean_y]
     x, y = np.random.multivariate_normal(mean, cov, size).T
     return x, y
 
@@ -25,19 +26,22 @@ def plot_scatter(x, y):
     return fig
 
 def main():
-    
-    # Banner image
-    banner_image = Image.open("Confiabilidad_imagen.jpeg")  # Replace with the actual path to your image
-    st.image(banner_image, use_column_width=True)
+    st.title("Correlation Explorer")
 
-    st.title("Confiabilidad y Análisis de Riesgo  Correlation Explorer")
+    # Banner image
+    banner_image = Image.open("path/to/your/image.jpg")  # Replace with the actual path to your image
+    st.image(banner_image, use_column_width=True)
 
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlation", -1.0, 1.0, 0.0, step=0.1)
+    mean_x = st.sidebar.slider("Mean of X-axis", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_x = st.sidebar.slider("Standard Deviation of X-axis", 0.1, 10.0, 1.0, step=0.1)
+    mean_y = st.sidebar.slider("Mean of Y-axis", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_y = st.sidebar.slider("Standard Deviation of Y-axis", 0.1, 10.0, 1.0, step=0.1)
 
-    # Generate data with correlation
+    # Generate data with correlation, mean, and standard deviation
     data_size = 100
-    x_data, y_data = generate_correlated_data(data_size, correlation_value)
+    x_data, y_data = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
     # Plot the scatter plot
     fig = plot_scatter(x_data, y_data)
