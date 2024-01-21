@@ -24,7 +24,7 @@ def plot_probability_distribution(distribution, params, title):
 def main():
 
     # Banner image
-    banner_image = Image.open("Confiabilidad_imagen.jpg")
+    banner_image = Image.open("Confiabilidad_imagen.jpeg")
     st.image(banner_image, use_column_width=True)
 
     st.title("Confiabilidad y análisis de riesgo  Visualizador de distribuciones de probabilidad")
