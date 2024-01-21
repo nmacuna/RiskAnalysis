@@ -15,9 +15,9 @@ def plot_probability_distribution(distribution, params, title):
     fig, ax = plt.subplots()
     x = np.linspace(distribution.ppf(0.01, *params), distribution.ppf(0.99, *params), 100)
     ax.plot(x, distribution.pdf(x, *params), 'r-', lw=2, alpha=0.6, label=title)
-    ax.set_title('Probability Distribution Plot')
-    ax.set_xlabel('X-axis')
-    ax.set_ylabel('Probability Density')
+    ax.set_title('Función de densidad de probabilidad')
+    ax.set_xlabel('Valores de la variable')
+    ax.set_ylabel('PDF')
     ax.legend()
     return fig
 
@@ -31,22 +31,23 @@ def main():
 
 
     # Sidebar for user input
-    distribution_type = st.sidebar.selectbox("Select Distribution", ["Exponential", "Lognormal", "Normal"])
+    distribution_type = st.sidebar.selectbox("Select Distribution", ["Exponencial", "Lognormal", "Normal"])
     
-    if distribution_type == "Exponential":
-        st.sidebar.header("Exponential Distribution Parameters")
+    if distribution_type == "Exponencial":
+        st.sidebar.header("Parámetros de la distribución exponencial")
         scale = st.sidebar.slider("Scale (λ)", 0.1, 10.0, 1.0, step=0.1)
         params = (scale,)
         distribution = expon
     elif distribution_type == "Lognormal":
-        st.sidebar.header("Lognormal Distribution Parameters")
-        sigma = st.sidebar.slider("Sigma (σ)", 0.1, 2.0, 0.5, step=0.1)
-        params = (sigma,)
+        st.sidebar.header("Parámetros de la distribución Lognormal")
+        log_mean = st.sidebar.slider("Media", -5.0, 5.0, 0.0, step=0.1)
+        log_std_dev = st.sidebar.slider("Desviación estándar", 0.1, 2.0, 0.5, step=0.1)
+        params = (log_mean, log_std_dev)
         distribution = lognorm
     else:  # Normal Distribution
-        st.sidebar.header("Normal Distribution Parameters")
-        mean = st.sidebar.slider("Mean", -10.0, 10.0, 0.0, step=0.1)
-        std_dev = st.sidebar.slider("Standard Deviation", 0.1, 10.0, 1.0, step=0.1)
+        st.sidebar.header("Parámetros de la distribución Normal")
+        mean = st.sidebar.slider("Media", -10.0, 10.0, 0.0, step=0.1)
+        std_dev = st.sidebar.slider("Desviación estándar", 0.1, 10.0, 1.0, step=0.1)
         params = (std_dev,)
         distribution = norm
 
