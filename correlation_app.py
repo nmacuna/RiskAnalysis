@@ -29,7 +29,7 @@ def main():
     st.title("Correlation Explorer")
 
     # Banner image
-    banner_image = Image.open("path/to/your/image.jpg")  # Replace with the actual path to your image
+    banner_image = Image.open("Confiabilidad_imagen.jpeg")
     st.image(banner_image, use_column_width=True)
 
     # Sidebar for user input
