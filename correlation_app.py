@@ -26,11 +26,11 @@ def plot_scatter(x, y):
     return fig
 
 def main():
-    st.title("Confiabilidad y análisis de riesgo  Visualizador de correlación")
-
     # Banner image
     banner_image = Image.open("Confiabilidad_imagen.jpeg")
     st.image(banner_image, use_column_width=True)
+
+    st.title("Confiabilidad y análisis de riesgo  Visualizador de correlación")
 
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
