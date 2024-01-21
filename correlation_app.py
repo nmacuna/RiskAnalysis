@@ -20,24 +20,24 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
 def plot_scatter(x, y):
     fig, ax = plt.subplots()
     ax.scatter(x, y, alpha=0.5)
-    ax.set_title('Scatter Plot with Correlation')
-    ax.set_xlabel('X-axis')
-    ax.set_ylabel('Y-axis')
+    ax.set_title('Generación de datos')
+    ax.set_xlabel('Variable X')
+    ax.set_ylabel('Variable Y')
     return fig
 
 def main():
-    st.title("Correlation Explorer")
+    st.title("Confiabilidad y análisis de riesgo  Correlation Explorer")
 
     # Banner image
     banner_image = Image.open("Confiabilidad_imagen.jpeg")
     st.image(banner_image, use_column_width=True)
 
     # Sidebar for user input
-    correlation_value = st.sidebar.slider("Correlation", -1.0, 1.0, 0.0, step=0.1)
-    mean_x = st.sidebar.slider("Mean of X-axis", -10.0, 10.0, 0.0, step=0.1)
-    std_dev_x = st.sidebar.slider("Standard Deviation of X-axis", 0.1, 10.0, 1.0, step=0.1)
-    mean_y = st.sidebar.slider("Mean of Y-axis", -10.0, 10.0, 0.0, step=0.1)
-    std_dev_y = st.sidebar.slider("Standard Deviation of Y-axis", 0.1, 10.0, 1.0, step=0.1)
+    correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
+    mean_x = st.sidebar.slider("Media variable X", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_x = st.sidebar.slider("Desviación estándar variable X", 0.1, 10.0, 1.0, step=0.1)
+    mean_y = st.sidebar.slider("Media variable Y", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_y = st.sidebar.slider("Desviación estándar variable Y", 0.1, 10.0, 1.0, step=0.1)
 
     # Generate data with correlation, mean, and standard deviation
     data_size = 100
