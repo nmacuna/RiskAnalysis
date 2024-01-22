@@ -19,7 +19,7 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
     return x, y, cov
 
 def plot_scatter_with_stats(x, y, cov):
-    fig, ax = plt.subplots()
+    fig, (ax, ax_histx, ax_histy) = plt.subplots(1, 3, figsize=(12, 4), gridspec_kw={'width_ratios': [4, 1, 1]})
 
     # Scatter plot
     ax.scatter(x, y, alpha=0.5)
@@ -35,22 +35,17 @@ def plot_scatter_with_stats(x, y, cov):
     ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1)
     ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1)
 
-    # Draw histograms near the axes
-    axinset_x = fig.add_axes([0.55, 0.2, 0.25, 0.25])
-    axinset_x.hist(x, bins=20, color='blue', alpha=0.7, orientation='vertical')
-    axinset_x.set_title('Distribución de X')
-    axinset_x.yaxis.tick_right()
-    axinset_x.xaxis.set_visible(False)
-
-    axinset_y = fig.add_axes([0.2, 0.55, 0.25, 0.25])
-    axinset_y.hist(y, bins=20, color='green', alpha=0.7, orientation='horizontal')
-    axinset_y.set_title('Distribución de Y')
-    axinset_y.xaxis.tick_top()
-    axinset_y.yaxis.set_visible(False)
-
     # Labels
     ax.set_xlabel('Variable X')
     ax.set_ylabel('Variable Y')
+
+    # Draw histograms
+    ax_histx.hist(x, bins=20, color='blue', alpha=0.7, orientation='vertical')
+    ax_histy.hist(y, bins=20, color='green', alpha=0.7, orientation='horizontal')
+
+    # Remove x and y axis labels from histograms
+    ax_histx.set_yticklabels([])
+    ax_histy.set_xticklabels([])
 
     return fig
 
