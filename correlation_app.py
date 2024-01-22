@@ -27,7 +27,7 @@ def plot_scatter_with_marginal_histograms(x, y):
 
     # Marginal histograms
     sns.histplot(x=x, ax=ax, bins=20, color='blue', kde=False, stat='density', element='step', fill=False)
-    sns.histplot(y=y, ax=ax, bins=20, color='green', kde=False, stat='density', element='step', fill=False, orientation='horizontal')
+    sns.histplot(y=y, bins=20, color='green', kde=False, stat='density', element='step', fill=False)
 
     # Draw mean lines
     ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1)
