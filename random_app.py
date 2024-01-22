@@ -75,7 +75,7 @@ def ajustar_distribucion(datos, tipo_distribucion):
     st.subheader("Estadísticas:")
     st.write(f"Media: {np.mean(datos)}")
     st.write(f"Mediana: {np.median(datos)}")
-    st.write(f"Moda: {st.mode(datos).mode[0]}")
+    st.write(f"Moda: {float(st.mode(datos).mode[0]) if len(st.mode(datos).mode) > 0 else 'No hay moda'}")
     st.write(f"Desviación Estándar: {np.std(datos)}")
     st.write(f"Varianza: {np.var(datos)}")
     st.write(f"Coeficiente de Variación: {np.std(datos) / np.mean(datos)}")
