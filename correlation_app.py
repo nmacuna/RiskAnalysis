@@ -18,27 +18,55 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
     x, y = np.random.multivariate_normal(mean, cov, size).T
     return x, y, cov
 
-def plot_scatter_with_regression(x, y, cov):
+def plot_scatter_with_stats(x, y, cov):
     fig, ax = plt.subplots()
 
     # Scatter plot
     ax.scatter(x, y, alpha=0.5)
     ax.set_title('Generación de datos')
 
-    # Regresión lineal
+    # Draw mean lines
+    ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1, label='Media X')
+    ax.axhline(np.mean(y), color='black', linestyle='-', linewidth=1, label='Media Y')
+
+    # Draw standard deviation lines
+    ax.axvline(np.mean(x) + np.std(x), color='black', linestyle='--', linewidth=1, label='+1 Desv. Est. X')
+    ax.axvline(np.mean(x) - np.std(x), color='black', linestyle='--', linewidth=1, label='-1 Desv. Est. X')
+    ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1, label='+1 Desv. Est. Y')
+    ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1, label='-1 Desv. Est. Y')
+
+    # Covariance and correlation coefficient
+    cov_text = f'Covarianza: {cov[0, 1]:.2f}\nCoef. de Correlación: {np.corrcoef(x, y)[0, 1]:.2f}'
+    ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
+
+    # Labels and legend
+    ax.set_xlabel('Variable X')
+    ax.set_ylabel('Variable Y')
+    ax.legend()
+
+    return fig
+
+def plot_regression(x, y):
+    fig, ax = plt.subplots()
+
+    # Scatter plot
+    ax.scatter(x, y, alpha=0.5)
+    ax.set_title('Generación de datos')
+
+    # Linear regression
     slope, intercept, r_value, p_value, std_err = linregress(x, y)
     line = slope * x + intercept
     ax.plot(x, line, color='red', label=f'Regresión lineal: y = {slope:.2f}x + {intercept:.2f}')
 
-    # Coeficiente de determinación (r^2)
+    # Coefficient of determination (r^2)
     r_squared = r_value**2
     ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
 
-    # Covarianza y coeficiente de correlación
-    cov_text = f'Covarianza: {cov[0, 1]:.2f}\nCoef. de Correlación: {np.corrcoef(x, y)[0, 1]:.2f}'
+    # Covariance and correlation coefficient
+    cov_text = f'Covarianza: {np.cov(x, y)[0, 1]:.2f}\nCoef. de Correlación: {np.corrcoef(x, y)[0, 1]:.2f}'
     ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
 
-    # Etiquetas y leyenda
+    # Labels and legend
     ax.set_xlabel('Variable X')
     ax.set_ylabel('Variable Y')
     ax.legend()
@@ -63,9 +91,13 @@ def main():
     data_size = 100
     x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
-    fig = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
-    st.pyplot(fig)
+    # Plot scatter plot with statistics
+    fig_stats = plot_scatter_with_stats(x_data, y_data, covariance_matrix)
+    st.pyplot(fig_stats)
+
+    # Plot regression line and parameters
+    fig_regression = plot_regression(x_data, y_data)
+    st.pyplot(fig_regression)
 
 if __name__ == "__main__":
     main()
