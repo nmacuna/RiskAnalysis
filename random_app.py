@@ -66,6 +66,9 @@ def main():
         # Seleccionar tipo de distribución para ajuste
         tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
 
+        # Crear un espacio vacío para mostrar el histograma y la distribución ajustada
+        espacio_grafico = st.empty()
+
         # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
         ajustar_distribucion(datos, tipo_distribucion)
 
