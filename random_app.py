@@ -49,7 +49,7 @@ def ajustar_distribucion(datos, tipo_distribucion):
     dfit.plot()
     plt.legend()
 
-    st.pyplot(fig)
+    return fig
 
 def main():
     st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
@@ -66,11 +66,11 @@ def main():
         # Seleccionar tipo de distribución para ajuste
         tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
 
-        # Crear un espacio vacío para mostrar el histograma y la distribución ajustada
-        espacio_grafico = st.empty()
-
         # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
-        ajustar_distribucion(datos, tipo_distribucion)
+        fig = ajustar_distribucion(datos, tipo_distribucion)
+
+        # Mostrar la figura en Streamlit
+        st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
