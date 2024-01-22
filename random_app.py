@@ -22,7 +22,8 @@ def generate_data(distribution, size, params):
         mean, sigma = params  # Extract mean and standard deviation
         data = np.random.lognormal(mean, sigma, size)
     elif distribution == "Weibull":
-        data = np.random.weibull(*params, size)
+        shape = params[0]  # Extract shape parameter
+        data = np.random.weibull(shape, size)
     elif distribution == "Exponential":
         scale = params[0]  # Extract scale parameter
         data = np.random.exponential(scale, size)
@@ -39,7 +40,7 @@ def plot_histogram_and_curve(data, bins, fitted_data, title):
     st.pyplot(fig)
 
 def fit_distribution(data, distribution):
-    params = st.sidebar.slider("Adjust Distribution Parameters", 0.1, 2.0, (0.5, 1.0), step=0.1)
+    params = getattr(stats, distribution).fit(data, floc=0)  # Using MLE with location fixed at 0 for non-negative distributions
     fitted_data = getattr(stats, distribution)(*params).pdf(data)
 
     plot_histogram_and_curve(data, 20, fitted_data, 'Histogram and Fitted Distribution')
