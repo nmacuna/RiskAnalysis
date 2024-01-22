@@ -9,6 +9,7 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
+from distfit import distfit
 
 def generar_datos_aleatorios():
     distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniform']
@@ -33,29 +34,12 @@ def generar_datos_aleatorios():
     return datos, distribucion_elegida
 
 def ajustar_distribucion(datos, tipo_distribucion):
-    # Ajustar la distribución utilizando SciPy
-    params = None
+    # Ajustar la distribución utilizando distfit
+    dfit = distfit(todf=True)
+    dfit.fit_transform(datos)
 
-    if tipo_distribucion == 'normal':
-        params = norm.fit(datos)
-        x = np.linspace(min(datos), max(datos), 1000)
-        y = norm.pdf(x, *params)
-    elif tipo_distribucion == 'lognormal':
-        params = lognorm.fit(datos)
-        x = np.linspace(min(datos), max(datos), 1000)
-        y = lognorm.pdf(x, *params)
-    elif tipo_distribucion == 'weibull':
-        params = weibull_min.fit(datos)
-        x = np.linspace(min(datos), max(datos), 1000)
-        y = weibull_min.pdf(x, *params)
-    elif tipo_distribucion == 'gamma':
-        params = gamma.fit(datos)
-        x = np.linspace(min(datos), max(datos), 1000)
-        y = gamma.pdf(x, *params)
-    elif tipo_distribucion == 'uniform':
-        params = uniform.fit(datos)
-        x = np.linspace(min(datos), max(datos), 1000)
-        y = uniform.pdf(x, *params)
+    # Obtener las predicciones para nuevos datos
+    y_pred = dfit.predict(datos)
 
     # Crear figura para el histograma y la distribución ajustada
     fig, ax = plt.subplots()
@@ -65,28 +49,29 @@ def ajustar_distribucion(datos, tipo_distribucion):
     plt.legend()
 
     # Ploteo de la distribución ajustada
-    plt.plot(x, y, 'r-', label=f'{tipo_distribucion} fit')
-
+    dfit.plot()
     plt.legend()
+
     st.pyplot(fig)
+
+    # Mostrar las predicciones para los datos generados
+    st.subheader("Predicciones para los Datos Generados:")
+    st.write(y_pred)
 
 def main():
     st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
 
     # Botón para generar datos aleatorios
     if st.button("Generar Datos Aleatorios"):
-        # Generar datos aleatorios (sin usar st.cache para esta función específica)
+        # Generar datos aleatorios
         datos, distribucion_elegida = generar_datos_aleatorios()
 
         # Mostrar la lista de los 1000 datos generados
         st.subheader("Lista de Datos Generados:")
         st.write(datos)
 
-        # Seleccionar tipo de distribución para ajuste
-        tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['normal', 'lognormal', 'weibull', 'gamma', 'uniform'])
-
         # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
-        ajustar_distribucion(datos, tipo_distribucion)
+        ajustar_distribucion(datos, distribucion_elegida)
 
 if __name__ == "__main__":
     main()
