@@ -40,18 +40,23 @@ def ajustar_distribucion(datos, tipo_distribucion):
 
     if tipo_distribucion == 'normal':
         params = norm.fit(datos)
+        x = np.linspace(min(datos), max(datos), 1000)
         y = norm.pdf(x, *params)
     elif tipo_distribucion == 'lognormal':
         params = lognorm.fit(datos)
+        x = np.linspace(min(datos), max(datos), 1000)
         y = lognorm.pdf(x, *params)
     elif tipo_distribucion == 'weibull':
         params = weibull_min.fit(datos)
+        x = np.linspace(min(datos), max(datos), 1000)
         y = weibull_min.pdf(x, *params)
     elif tipo_distribucion == 'gamma':
         params = gamma.fit(datos)
+        x = np.linspace(min(datos), max(datos), 1000)
         y = gamma.pdf(x, *params)
     elif tipo_distribucion == 'uniform':
         params = uniform.fit(datos)
+        x = np.linspace(min(datos), max(datos), 1000)
         y = uniform.pdf(x, *params)
 
     # Crear figura para el histograma y la distribución ajustada
