@@ -93,9 +93,9 @@ def main():
 
     # Generate data with correlation, mean, and standard deviation
     data_size = 100
-    x_data, y_data, _ = generate_correlated_data(data_size, correlation_value, mean
+    x_data, y_data, _ = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-                                                 # Plot scatter plot with marginal histograms
+    # Plot scatter plot with marginal histograms
     fig_scatter_histograms = plot_scatter_with_marginal_histograms(x_data, y_data)
     st.pyplot(fig_scatter_histograms)
 
