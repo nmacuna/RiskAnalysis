@@ -89,7 +89,13 @@ def ajustar_distribucion(datos, tipo_distribucion):
     return fig
 
 def main():
-    st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
+
+    # Banner image
+    banner_image = Image.open("Confiabilidad_imagen.jpeg")
+    st.image(banner_image, use_column_width=True)
+
+    st.title("Confiabilidad y análisis de riesgo   Generación de datos aleatorios y ajuste de distribuciones")
+    
 
     # Generar datos aleatorios solo si es la primera ejecución o el botón es presionado
     if "datos_generados" not in st.session_state or st.button("Generar Datos Aleatorios"):
