@@ -7,10 +7,11 @@ Created on Sun Jan 21 15:43:45 2024
 
 import streamlit as st
 import numpy as np
-import pandas as pd  # Add this line
 import seaborn as sns
 import matplotlib.pyplot as plt
+from PIL import Image
 from scipy.stats import linregress
+import pandas as pd  # Add this import for DataFrame
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
     cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
@@ -18,6 +19,33 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
     mean = [mean_x, mean_y]
     x, y = np.random.multivariate_normal(mean, cov, size).T
     return x, y, cov
+
+def plot_scatter_with_regression(x, y, cov):
+    fig, ax = plt.subplots()
+
+    # Scatter plot
+    ax.scatter(x, y, alpha=0.5)
+    ax.set_title('Generación de datos')
+
+    # Regresión lineal
+    slope, intercept, r_value, p_value, std_err = linregress(x, y)
+    line = slope * x + intercept
+    ax.plot(x, line, color='red', label=f'Regresión lineal: y = {slope:.2f}x + {intercept:.2f}')
+
+    # Coeficiente de determinación (r^2)
+    r_squared = r_value**2
+    ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
+
+    # Covarianza y coeficiente de correlación
+    cov_text = f'Covarianza: {cov[0, 1]:.2f}\nCoef. de Correlación: {np.corrcoef(x, y)[0, 1]:.2f}'
+    ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
+
+    # Etiquetas y leyenda
+    ax.set_xlabel('Variable X')
+    ax.set_ylabel('Variable Y')
+    ax.legend()
+
+    return fig
 
 def plot_scatter_with_regression_and_histograms(x, y):
     # Create a DataFrame for Seaborn
@@ -42,9 +70,12 @@ def plot_scatter_with_regression_and_histograms(x, y):
 
     return g
 
-
 def main():
-    st.title("Scatter Plot with Marginal Histograms and Regression Line (Seaborn)")
+    # Banner image
+    banner_image = Image.open("Confiabilidad_imagen.jpeg")
+    st.image(banner_image, use_column_width=True)
+
+    st.title("Confiabilidad y análisis de riesgo  Visualizador de correlación")
 
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
@@ -55,12 +86,14 @@ def main():
 
     # Generate data with correlation, mean, and standard deviation
     data_size = 100
-    x_data, y_data, _ = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
+    x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot scatter plot with regression line and histograms using Seaborn
+    # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
+    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
+    st.pyplot(fig_scatter)
+
+    # Plot scatter plot with marginal histograms
     fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
-
-    # Display the plot using Streamlit
     st.pyplot(fig_seaborn)
 
 if __name__ == "__main__":
