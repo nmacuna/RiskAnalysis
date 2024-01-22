@@ -11,7 +11,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from PIL import Image
 from scipy.stats import linregress
-import pandas as pd  # Add this import for DataFrame
+import pandas as pd
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
     cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
@@ -20,8 +20,8 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
     x, y = np.random.multivariate_normal(mean, cov, size).T
     return x, y, cov
 
-def plot_scatter_with_regression(x, y, cov):
-    fig, ax = plt.subplots()
+def plot_scatter_with_regression(x, y, cov, figsize=(6, 6)):
+    fig, ax = plt.subplots(figsize=figsize)
 
     # Scatter plot
     ax.scatter(x, y, alpha=0.5)
@@ -47,13 +47,13 @@ def plot_scatter_with_regression(x, y, cov):
 
     return fig
 
-def plot_scatter_with_regression_and_histograms(x, y):
+def plot_scatter_with_regression_and_histograms(x, y, figsize=(4, 4)):
     # Create a DataFrame for Seaborn
     df = pd.DataFrame({'X': x, 'Y': y})
 
     # Create a jointplot without the regression line
     sns.set(style="white", color_codes=True)
-    g = sns.jointplot(x="X", y="Y", data=df, kind="scatter", marginal_kws=dict(bins=20, fill=False))
+    g = sns.jointplot(x="X", y="Y", data=df, kind="scatter", marginal_kws=dict(bins=20, fill=False), height=figsize[1])
 
     # Access the axes and plot mean and standard deviation lines
     ax = g.ax_joint
@@ -65,7 +65,7 @@ def plot_scatter_with_regression_and_histograms(x, y):
     ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1)
 
     # Save the plot with correct size
-    plt.figure(figsize=(4, 4))
+    plt.figure(figsize=figsize)
     plt.savefig("marginal_plot_with_regression_line_Seaborn.png", dpi=150)
 
     return g
@@ -89,11 +89,11 @@ def main():
     x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
     # Plot scatter plot with marginal histograms
-    fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
+    fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data, figsize=(4, 4))
     st.pyplot(fig_seaborn)
     
     # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
-    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
+    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix, figsize=(6, 6))
     st.pyplot(fig_scatter)
 
 if __name__ == "__main__":
