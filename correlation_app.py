@@ -82,11 +82,7 @@ def plot_regression_and_parameters(x, y):
     return fig
 
 def main():
-    # Banner image
-    banner_image = Image.open("Confiabilidad_imagen.jpeg")
-    st.image(banner_image, use_column_width=True)
-
-    st.title("Confiabilidad y análisis de riesgo  Visualizador de correlación")
+    st.title("Scatter Plot with Marginal Histograms and Regression Analysis")
 
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
@@ -97,11 +93,11 @@ def main():
 
     # Generate data with correlation, mean, and standard deviation
     data_size = 100
-    x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
+    x_data, y_data, _ = generate_correlated_data(data_size, correlation_value, mean
 
-    # Plot scatter plot with marginal histograms
-    fig_marginal_histograms = plot_scatter_with_marginal_histograms(x_data, y_data)
-    st.pyplot(fig_marginal_histograms)
+                                                 # Plot scatter plot with marginal histograms
+    fig_scatter_histograms = plot_scatter_with_marginal_histograms(x_data, y_data)
+    st.pyplot(fig_scatter_histograms)
 
     # Plot regression line and parameters
     fig_regression_parameters = plot_regression_and_parameters(x_data, y_data)
