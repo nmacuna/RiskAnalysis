@@ -30,13 +30,16 @@ def generate_data(distribution, size, params):
     return data
 
 def fit_distribution(data):
+    # Initialize distfit
     dfit = distfit()
-    dfit.fit_transform(data)
 
-    # Plotting
-    fig, ax = plt.subplots()
-    dfit.plot(show=True, time=True, ax=ax)
-    st.image(fig, format='png', caption='Fitted Distribution', use_container_width=True)
+    # Fit on data
+    results = dfit.fit_transform(data)
+
+    # Display fit results
+    st.write("Fit Results:")
+    for distribution, params in results.items():
+        st.write(f"{distribution}: RSS={params['RSS']}, loc={params['loc']}, scale={params['scale']}")
 
 def main():
     st.title("Random Number Generator and Distribution Fitting")
