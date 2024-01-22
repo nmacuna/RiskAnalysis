@@ -71,8 +71,6 @@ def ajustar_distribucion(datos, tipo_distribucion):
     st.subheader("Parámetros de la Distribución Ajustada:")
     st.write(f"Loc: {round(loc, 3)}")
     st.write(f"Scale: {round(scale, 3)}")
-    if 'arg' in dfit.model:
-        st.write(f"Argumentos Adicionales: {round(dfit.model['arg'], 3)}")
 
     st.subheader("Estadísticas:")
     st.write(f"Media: {round(np.mean(datos), 3)}")
