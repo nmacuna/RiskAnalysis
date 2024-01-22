@@ -69,24 +69,24 @@ def ajustar_distribucion(datos, tipo_distribucion):
 
     # Mostrar parámetros y estadísticas
     st.subheader("Parámetros de la Distribución Ajustada:")
-    st.write(f"Loc: {loc}")
-    st.write(f"Scale: {scale}")
+    st.write(f"Loc: {round(loc, 3)}")
+    st.write(f"Scale: {round(scale, 3)}")
     if 'arg' in dfit.model:
-        st.write(f"Argumentos Adicionales: {dfit.model['arg']}")
+        st.write(f"Argumentos Adicionales: {round(dfit.model['arg'], 3)}")
 
     st.subheader("Estadísticas:")
-    st.write(f"Media: {np.mean(datos)}")
-    st.write(f"Mediana: {np.median(datos)}")
-    st.write(f"Moda: {float(mode(datos).mode[0]) if len(mode(datos).mode) > 0 else 'No hay moda'}")
-    st.write(f"Desviación Estándar: {np.std(datos)}")
-    st.write(f"Varianza: {np.var(datos)}")
-    st.write(f"Coeficiente de Variación: {np.std(datos) / np.mean(datos)}")
-    st.write(f"Percentil 25: {np.percentile(datos, 25)}")
-    st.write(f"Percentil 75: {np.percentile(datos, 75)}")
-    st.write(f"Rango Interquartílico (IQR): {st.iqr(datos)}")
-    st.write(f"Coeficiente de Asimetría: {st.skew(datos)}")
-    st.write(f"Curtosis: {st.kurtosis(datos)}")
-    st.write(f"Entropía: {st.entropy(np.histogram(datos, bins='auto')[0])}")
+    st.write(f"Media: {round(np.mean(datos), 3)}")
+    st.write(f"Mediana: {round(np.median(datos), 3)}")
+    st.write(f"Moda: {round(float(mode(datos).mode[0]) if len(mode(datos).mode) > 0 else 'No hay moda', 3)}")
+    st.write(f"Desviación Estándar: {round(np.std(datos), 3)}")
+    st.write(f"Varianza: {round(np.var(datos), 3)}")
+    st.write(f"Coeficiente de Variación: {round(np.std(datos) / np.mean(datos), 3)}")
+    st.write(f"Percentil 25: {round(np.percentile(datos, 25), 3)}")
+    st.write(f"Percentil 75: {round(np.percentile(datos, 75), 3)}")
+    st.write(f"Rango Interquartílico (IQR): {round(np.percentile(datos, 75) - np.percentile(datos, 25), 3)}")
+    st.write(f"Coeficiente de Asimetría: {round(st.skew(datos), 3)}")
+    st.write(f"Curtosis: {round(st.kurtosis(datos), 3)}")
+    st.write(f"Entropía: {round(st.entropy(np.histogram(datos, bins='auto')[0]), 3)}")
 
     return fig
 
