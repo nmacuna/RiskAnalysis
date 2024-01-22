@@ -8,19 +8,19 @@ Created on Sun Jan 21 15:43:45 2024
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-from distfit import distfit
+from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
 
 # Utilizamos st.cache para almacenar el resultado de la generación de datos
 @st.cache(allow_output_mutation=True)
 def generar_datos_aleatorios():
-    distribuciones = ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform']
+    distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniform']
     distribucion_elegida = np.random.choice(distribuciones)
 
-    if distribucion_elegida == 'norm':
+    if distribucion_elegida == 'normal':
         datos = np.random.normal(np.random.uniform(0, 10), np.random.uniform(1, 3), 1000)
-    elif distribucion_elegida == 'lognorm':
+    elif distribucion_elegida == 'lognormal':
         datos = np.random.lognormal(np.random.uniform(0, 1), np.random.uniform(0.1, 1), 1000)
-    elif distribucion_elegida == 'dweibull':
+    elif distribucion_elegida == 'weibull':
         datos = np.random.weibull(np.random.uniform(1, 5), 1000)
     elif distribucion_elegida == 'gamma':
         datos = np.random.gamma(np.random.uniform(1, 5), np.random.uniform(1, 2), 1000)
@@ -30,25 +30,40 @@ def generar_datos_aleatorios():
         # En caso de que no coincida con ninguna distribución
         st.error(f"Error: Distribución no reconocida - {distribucion_elegida}")
         datos = np.random.normal(0, 1, 1000)  # Se genera una distribución normal por defecto
-        distribucion_elegida = 'norm'
+        distribucion_elegida = 'normal'
     
     return datos, distribucion_elegida
 
 def ajustar_distribucion(datos, tipo_distribucion):
-    dist = distfit()
-    try:
-        dist.fit_transform(datos)
+    # Ajustar la distribución utilizando SciPy
+    params = None
 
-        # Ploteo del histograma
-        plt.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
+    if tipo_distribucion == 'normal':
+        params = norm.fit(datos)
+    elif tipo_distribucion == 'lognormal':
+        params = lognorm.fit(datos)
+    elif tipo_distribucion == 'weibull':
+        params = weibull_min.fit(datos)
+    elif tipo_distribucion == 'gamma':
+        params = gamma.fit(datos)
+    elif tipo_distribucion == 'uniform':
+        params = uniform.fit(datos)
 
-        # Ploteo de la distribución ajustada
-        dist.plot(tipo_distribucion)
+    # Crear figura para el histograma y la distribución ajustada
+    fig, ax = plt.subplots()
 
-        plt.legend()
-        st.pyplot()
-    except Exception as e:
-        st.error(f"Error al ajustar la distribución: {str(e)}")
+    # Histograma
+    plt.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
+    plt.legend()
+
+    # Ploteo de la distribución ajustada
+    x = np.linspace(min(datos), max(datos), 1000)
+    if params is not None:
+        y = tipo_distribucion.pdf(x, *params[:-2], loc=params[-2], scale=params[-1])
+        plt.plot(x, y, 'r-', label=f'{tipo_distribucion} fit')
+
+    plt.legend()
+    st.pyplot(fig)
 
 def main():
     st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
@@ -62,23 +77,10 @@ def main():
         st.subheader("Lista de Datos Generados:")
         st.write(datos)
 
-        # Crear figura para el histograma y la distribución ajustada
-        fig, ax = plt.subplots()
-
-        # Histograma
-        plt.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
-        plt.legend()
-
-        # Información sobre la distribución generada
-        st.subheader(f"Distribución Generada: {distribucion_elegida}")
-
-        # Mostrar la figura con el histograma
-        st.pyplot(fig)
-
         # Seleccionar tipo de distribución para ajuste
-        tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
+        tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['normal', 'lognormal', 'weibull', 'gamma', 'uniform'])
 
-        # Ajustar distribución y mostrar la figura actualizada
+        # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
         ajustar_distribucion(datos, tipo_distribucion)
 
 if __name__ == "__main__":
