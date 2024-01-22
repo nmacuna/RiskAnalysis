@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from scipy.stats import linregress
 import pandas as pd
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
     cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
@@ -24,13 +25,13 @@ def plot_scatter_with_regression(x, y, cov, figsize=(6, 6)):
     fig, ax = plt.subplots(figsize=figsize)
 
     # Scatter plot
-    ax.scatter(x, y, alpha=0.5)
+    ax.scatter(x, y, alpha=0.5, color='#4CAF50')  # Green color
     ax.set_title('Generación de datos')
 
     # Regresión lineal
     slope, intercept, r_value, p_value, std_err = linregress(x, y)
     line = slope * x + intercept
-    ax.plot(x, line, color='red', label=f'Regresión lineal: y = {slope:.2f}x + {intercept:.2f}')
+    ax.plot(x, line, color='#FF5733', label=f'Regresión lineal: y = {slope:.2f}x + {intercept:.2f}')  # Orange color
 
     # Coeficiente de determinación (r^2)
     r_squared = r_value**2
@@ -57,12 +58,12 @@ def plot_scatter_with_regression_and_histograms(x, y, figsize=(4, 4)):
 
     # Access the axes and plot mean and standard deviation lines
     ax = g.ax_joint
-    ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1)
-    ax.axhline(np.mean(y), color='black', linestyle='-', linewidth=1)
-    ax.axvline(np.mean(x) + np.std(x), color='black', linestyle='--', linewidth=1)
-    ax.axvline(np.mean(x) - np.std(x), color='black', linestyle='--', linewidth=1)
-    ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1)
-    ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1)
+    ax.axvline(np.mean(x), color='#000000', linestyle='-', linewidth=1)  # Black color
+    ax.axhline(np.mean(y), color='#000000', linestyle='-', linewidth=1)
+    ax.axvline(np.mean(x) + np.std(x), color='#000000', linestyle='--', linewidth=1)
+    ax.axvline(np.mean(x) - np.std(x), color='#000000', linestyle='--', linewidth=1)
+    ax.axhline(np.mean(y) + np.std(y), color='#000000', linestyle='--', linewidth=1)
+    ax.axhline(np.mean(y) - np.std(y), color='#000000', linestyle='--', linewidth=1)
 
     # Save the plot with correct size
     plt.figure(figsize=figsize)
@@ -88,15 +89,18 @@ def main():
     data_size = 100
     x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot scatter plot with marginal histograms
-    fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data, figsize=(4, 4))
-    
-    # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
-    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix, figsize=(6, 6))
+    # Plot the scatter plot with regression line
+    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
+
+    # Plot the scatter plot with histograms and regression line (Seaborn)
+    fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
 
     # Display figures side by side horizontally
-    st.image(fig_scatter, caption='Scatter Plot with Regression', use_column_width=True)
-    st.image(fig_seaborn, caption='Scatter Plot with Histograms', use_column_width=True)
+    canvas_scatter = FigureCanvas(fig_scatter)
+    canvas_seaborn = FigureCanvas(fig_seaborn)
+
+    st.image(canvas_scatter.tostring_rgb(), caption='Scatter Plot with Regression', use_column_width=True, format='png')
+    st.image(canvas_seaborn.tostring_rgb(), caption='Scatter Plot with Histograms', use_column_width=True, format='png')
 
 if __name__ == "__main__":
     main()
