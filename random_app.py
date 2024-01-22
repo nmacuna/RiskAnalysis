@@ -41,10 +41,11 @@ def ajustar_distribucion(datos, tipo_distribucion):
         plt.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
 
         # Ploteo de la distribución ajustada
-        dist.plot(tipo_distribucion, ax=plt.gca())
+        fig, ax = plt.subplots()
+        dist.plot(tipo_distribucion, ax=ax)
+        st.pyplot(fig)
 
         plt.legend()
-        st.pyplot()
     except Exception as e:
         st.error(f"Error al ajustar la distribución: {str(e)}")
 
