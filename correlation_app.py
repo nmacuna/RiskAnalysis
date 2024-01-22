@@ -14,6 +14,7 @@ from scipy.stats import linregress
 import pandas as pd
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
+
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
     cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
                     [correlation * std_dev_x * std_dev_y, std_dev_y**2]])
