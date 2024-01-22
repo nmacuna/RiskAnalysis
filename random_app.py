@@ -7,6 +7,7 @@ Created on Sun Jan 21 15:43:45 2024
 
 import streamlit as st
 import numpy as np
+import matplotlib.pyplot as plt
 from distfit import distfit
 
 # Function to generate random data based on a specified distribution and parameters
@@ -32,11 +33,20 @@ def fit_distribution(data):
 
     # Display fit results
     st.write("Fit Results:")
-    for dist_name, params in results.items():
-        if 'RSS' in params:
-            st.write(f"[distfit] >[{dist_name}] [RSS: {params['RSS']:.7f}] [loc={params.get('loc', 'N/A'):.3f} scale={params.get('scale', 'N/A'):.3f}]")
+    for dist_name, dist_params in results.items():
+        if 'RSS' in dist_params:
+            st.write(f"[distfit] >[{dist_name}] [RSS: {dist_params['RSS']:.7f}] [loc={dist_params.get('loc', 'N/A'):.3f} scale={dist_params.get('scale', 'N/A'):.3f}]")
 
     return results
+
+# Function to plot the generated data
+def plot_generated_data(data):
+    plt.figure(figsize=(8, 6))
+    plt.hist(data, bins=30, density=True, alpha=0.7, color='blue', edgecolor='black')
+    plt.title('Generated Random Data')
+    plt.xlabel('Value')
+    plt.ylabel('Frequency')
+    st.pyplot()
 
 def main():
     st.title("Random Number Generator and Distribution Fitting")
@@ -47,6 +57,9 @@ def main():
     # Generate random data
     st.header("Generated Random Data")
     generated_data = generate_data("Normal", data_size, None)
+
+    # Plot generated data
+    plot_generated_data(generated_data)
 
     # Generate new data button
     if st.button("Generate New Data"):
