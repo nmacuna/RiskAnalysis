@@ -35,11 +35,8 @@ def generar_datos_aleatorios():
 
 def ajustar_distribucion(datos, tipo_distribucion):
     # Ajustar la distribución utilizando distfit
-    dfit = distfit(todf=True)
+    dfit = distfit(todf=True, distr=tipo_distribucion)
     dfit.fit_transform(datos)
-
-    # Obtener las predicciones para nuevos datos
-    y_pred = dfit.predict(datos)
 
     # Crear figura para el histograma y la distribución ajustada
     fig, ax = plt.subplots()
@@ -54,10 +51,6 @@ def ajustar_distribucion(datos, tipo_distribucion):
 
     st.pyplot(fig)
 
-    # Mostrar las predicciones para los datos generados
-    st.subheader("Predicciones para los Datos Generados:")
-    st.write(y_pred)
-
 def main():
     st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
 
@@ -70,8 +63,11 @@ def main():
         st.subheader("Lista de Datos Generados:")
         st.write(datos)
 
+        # Seleccionar tipo de distribución para ajuste
+        tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
+
         # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
-        ajustar_distribucion(datos, distribucion_elegida)
+        ajustar_distribucion(datos, tipo_distribucion)
 
 if __name__ == "__main__":
     main()
