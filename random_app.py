@@ -8,6 +8,8 @@ Created on Sun Jan 21 15:43:45 2024
 import streamlit as st
 import numpy as np
 from distfit import distfit
+import matplotlib.pyplot as plt
+
 
 def generate_random_data(size):
     distribution_type = np.random.choice(["Normal", "Lognormal", "Weibull", "Exponential"])
@@ -32,7 +34,9 @@ def fit_distribution(data):
     dfit.fit_transform(data)
 
     # Plotting
-    st.pyplot(dfit.plot(show=True, time=True))
+    fig, ax = plt.subplots()
+    dfit.plot(show=True, time=True, ax=ax)
+    st.image(fig, format='png', caption='Fitted Distribution', use_container_width=True)
 
 def main():
     st.title("Random Number Generator and Distribution Fitting")
