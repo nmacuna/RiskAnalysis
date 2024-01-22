@@ -10,103 +10,50 @@ import numpy as np
 import matplotlib.pyplot as plt
 from distfit import distfit
 
-# Function to generate random data based on a specified distribution and parameters
-def generate_data(distribution, size, params):
-    if distribution == "Normal":
-        data = np.random.normal(size=size)
-    elif distribution == "Lognormal":
-        data = np.random.lognormal(params[0], params[1], size)
-    elif distribution == "Weibull":
-        data = np.random.weibull(params[0], size)
-    elif distribution == "Exponential":
-        data = np.random.exponential(params[0], size)
-    elif distribution == "T":
-        data = np.random.standard_t(params[0], size)
-    return data
+def generar_datos_aleatorios():
+    # Distribuciones posibles
+    distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniforme']
+    
+    # Elegir una distribución aleatoria
+    distribucion_elegida = np.random.choice(distribuciones)
 
-# Function to fit distribution using distfit
-def fit_distribution(data):
-    dfit = distfit()
-
-    # Fit on data
-    results = dfit.fit_transform(data)
-
-    # Display fit results
-    st.write("Fit Results:")
-    for dist_name, dist_params in results.items():
-        rss_value = dist_params.get('RSS', 'N/A')
-        loc_value = dist_params.get('loc', 'N/A')
-        scale_value = dist_params.get('scale', 'N/A')
-        st.write(f"[distfit] >[{dist_name}] [RSS: {rss_value:.7f}] [loc={loc_value:.3f} scale={scale_value:.3f}]")
-
-    return results
-
-# Function to plot the generated data
-def plot_generated_data(data):
-    fig, ax = plt.subplots(figsize=(8, 6))
-    ax.hist(data, bins=30, density=True, alpha=0.7, color='blue', edgecolor='black')
-    ax.set_title('Generated Random Data')
-    ax.set_xlabel('Value')
-    ax.set_ylabel('Frequency')
-    st.pyplot(fig)
+    # Generar 1000 datos aleatorios según la distribución elegida
+    if distribucion_elegida == 'normal':
+        datos = np.random.normal(np.random.uniform(0, 10), np.random.uniform(1, 3), 1000)
+    elif distribucion_elegida == 'lognormal':
+        datos = np.random.lognormal(np.random.uniform(0, 1), np.random.uniform(0.1, 1), 1000)
+    elif distribucion_elegida == 'weibull':
+        datos = np.random.weibull(np.random.uniform(1, 5), 1000)
+    elif distribucion_elegida == 'gamma':
+        datos = np.random.gamma(np.random.uniform(1, 5), np.random.uniform(1, 2), 1000)
+    elif distribucion_elegida == 'uniforme':
+        datos = np.random.uniform(np.random.uniform(0, 5), np.random.uniform(5, 10), 1000)
+    
+    return datos, distribucion_elegida
 
 def main():
-    st.title("Random Number Generator and Distribution Fitting")
+    st.title("App de Generación de Datos Aleatorios")
 
-    # Sidebar for user input
-    data_size = st.sidebar.slider("Data Size", 100, 10000, 1000, step=100)
+    # Botón para generar datos aleatorios
+    if st.button("Generar Datos Aleatorios"):
+        datos, distribucion_elegida = generar_datos_aleatorios()
 
-    # Generate random data
-    st.header("Generated Random Data")
-    generated_data = generate_data("Normal", data_size, None)
+        # Histograma
+        st.subheader("Histograma de Datos Generados")
+        plt.hist(datos, bins=30, color='blue', alpha=0.7)
+        st.pyplot()
 
-    # Plot generated data
-    plot_generated_data(generated_data)
+        # Ajuste de la distribución con distfit
+        st.subheader("Ajuste de Distribución con distfit")
+        dist = distfit()
+        dist.fit_transform(datos)
 
-    # Generate new data button
-    if st.button("Generate New Data"):
-        generated_data = generate_data("Normal", data_size, None)
+        # Ploteo de resultados
+        dist.plot_summary()
+        st.pyplot()
 
-    # Fit distribution to data
-    st.header("Fit Results")
-    fit_results = fit_distribution(generated_data)
-
-    # User selects distribution for fitting
-    selected_distribution = st.selectbox("Select Distribution for Fitting", ["Normal", "Lognormal", "Weibull", "Exponential", "T"])
-
-    # User adjusts parameters if desired
-    st.sidebar.header("Adjust Distribution Parameters")
-    params = None
-
-    selected_distribution_params = fit_results.get(selected_distribution, {})
-
-    if selected_distribution_params:
-        if selected_distribution == "Normal":
-            mean = st.sidebar.number_input("Mean", value=selected_distribution_params.get("loc", 0))
-            std_dev = st.sidebar.number_input("Standard Deviation", value=selected_distribution_params.get("scale", 1))
-            params = (mean, std_dev)
-        elif selected_distribution == "Lognormal":
-            mu = st.sidebar.number_input("Mu", value=selected_distribution_params.get("loc", 0))
-            sigma = st.sidebar.number_input("Sigma", value=selected_distribution_params.get("scale", 1))
-            params = (mu, sigma)
-        elif selected_distribution == "Weibull":
-            shape = st.sidebar.number_input("Shape", value=selected_distribution_params.get("loc", 1))
-            params = (shape,)
-        elif selected_distribution == "Exponential":
-            scale = st.sidebar.number_input("Scale", value=selected_distribution_params.get("scale", 1))
-            params = (scale,)
-        elif selected_distribution == "T":
-            df = st.sidebar.number_input("Degrees of Freedom", value=selected_distribution_params.get("df", 1))
-            params = (df,)
-    else:
-        st.sidebar.warning(f"No fit results available for {selected_distribution}. Using default parameters.")
-
-    # Generate data with user-selected distribution and adjusted parameters
-    generated_data = generate_data(selected_distribution, data_size, params)
-
-    # Fit and display results
-    st.header("Fit Results for User-Selected Distribution")
-    fit_distribution(generated_data)
+        # Información sobre la distribución generada
+        st.subheader(f"Distribución Generada: {distribucion_elegida}")
 
 if __name__ == "__main__":
     main()
