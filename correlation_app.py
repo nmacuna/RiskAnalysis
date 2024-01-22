@@ -68,11 +68,11 @@ def main():
     
     # First Figure: Scatter plot with histograms and mean/std lines
     fig_marginal_histograms = plot_scatter_with_marginal_histograms(x_data, y_data)
-    st.image(fig_marginal_histograms, caption='Scatter Plot with Histograms and Mean/Std Lines', use_column_width=True)
+    st.pyplot(fig_marginal_histograms, caption='Scatter Plot with Histograms and Mean/Std Lines', use_container_width=True)
     
     # Second Figure: Scatter plot with regression line and histograms
     fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
-    st.image(fig_seaborn, caption='Scatter Plot with Regression Line and Histograms', use_column_width=True)
+    st.pyplot(fig_seaborn, caption='Scatter Plot with Regression Line and Histograms', use_container_width=True)
 
 if __name__ == "__main__":
     main()
