@@ -14,7 +14,8 @@ def generate_data(distribution, size, params):
     if distribution == "Normal":
         data = np.random.normal(*params, size)
     elif distribution == "Lognormal":
-        data = np.random.lognormal(*params, size)
+        mean, sigma, _ = params  # Extract mean and standard deviation
+        data = np.random.lognormal(mean, sigma, size)
     elif distribution == "Weibull":
         data = np.random.weibull(*params, size)
     elif distribution == "Exponential":
