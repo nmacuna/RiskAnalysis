@@ -67,7 +67,6 @@ def main():
 
     # Sidebar for user input
     data_size = st.sidebar.slider("Data Size", 100, 10000, 1000, step=100)
-    fit_distribution_type = st.sidebar.selectbox("Select Distribution for Fitting", ["norm", "lognorm", "weibull_min", "expon"])
 
     # Generate new data button
     if st.sidebar.button("Generate New Data"):
@@ -80,7 +79,8 @@ def main():
     # Fit distribution to data
     st.header("Histogram and Fitted Distribution")
     try:
-        params = st.sidebar.slider("Adjust Distribution Parameters", 0.1, 2.0, (0.5, 1.0), step=0.1)
+        fit_distribution_type = st.sidebar.selectbox("Select Distribution for Fitting", ["norm", "lognorm", "weibull_min", "expon"])
+        params = np.random.rand(2)  # Default parameters
         fit_distribution(st.session_state.generated_data, fit_distribution_type, params)
     except Exception as e:
         st.warning(f"Failed to fit distribution: {e}")
