@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from distfit import distfit
 
 def generar_datos_aleatorios():
-    distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniforme']
+    distribuciones = ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform']
     distribucion_elegida = np.random.choice(distribuciones)
 
     if distribucion_elegida == 'norm':
