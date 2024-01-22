@@ -6,6 +6,7 @@ Created on Sun Jan 21 15:43:45 2024
 """
 import streamlit as st
 import numpy as np
+from PIL import Image
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
 from distfit import distfit
