@@ -54,27 +54,26 @@ def plot_scatter_with_regression_and_histograms(x, y):
     
     # Create a joint plot with regression line and marginal histograms
     g = sns.jointplot(x=x, y=y, kind="reg", height=6)
-    
-    # Extract the axes from the joint plot
-    ax = g.ax_joint
 
     # Plot mean and standard deviation lines
     mean_x, mean_y = np.mean(x), np.mean(y)
     std_x, std_y = np.std(x), np.std(y)
 
-    ax.axvline(mean_x, color='black', linestyle='--', linewidth=2, label=f'Mean X: {mean_x:.2f}')
-    ax.axhline(mean_y, color='black', linestyle='--', linewidth=2, label=f'Mean Y: {mean_y:.2f}')
+    g.ax_joint.axvline(mean_x, color='black', linestyle='--', linewidth=2, label=f'Mean X: {mean_x:.2f}')
+    g.ax_joint.axhline(mean_y, color='black', linestyle='--', linewidth=2, label=f'Mean Y: {mean_y:.2f}')
 
-    ax.axvline(mean_x + std_x, color='blue', linestyle='--', linewidth=2, label=f'Mean X + 1 Std Dev')
-    ax.axhline(mean_y + std_y, color='blue', linestyle='--', linewidth=2, label=f'Mean Y + 1 Std Dev')
+    g.ax_joint.axvline(mean_x + std_x, color='blue', linestyle='--', linewidth=2, label=f'Mean X + 1 Std Dev')
+    g.ax_joint.axhline(mean_y + std_y, color='blue', linestyle='--', linewidth=2, label=f'Mean Y + 1 Std Dev')
 
-    ax.axvline(mean_x - std_x, color='red', linestyle='--', linewidth=2, label=f'Mean X - 1 Std Dev')
-    ax.axhline(mean_y - std_y, color='red', linestyle='--', linewidth=2, label=f'Mean Y - 1 Std Dev')
+    g.ax_joint.axvline(mean_x - std_x, color='red', linestyle='--', linewidth=2, label=f'Mean X - 1 Std Dev')
+    g.ax_joint.axhline(mean_y - std_y, color='red', linestyle='--', linewidth=2, label=f'Mean Y - 1 Std Dev')
 
     # Display legend
-    ax.legend()
+    g.ax_joint.legend()
 
-    return g
+    # Display the joint plot using st.pyplot()
+    st.pyplot(g)
+
 
 def main():
     # Banner image
