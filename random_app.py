@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
 from distfit import distfit
 
-@st.cache(show_spinner=False, suppress_st_warning=True)
 def generar_datos_aleatorios():
     distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniform']
     distribucion_elegida = np.random.choice(distribuciones)
@@ -34,7 +33,6 @@ def generar_datos_aleatorios():
     
     return datos, distribucion_elegida
 
-@st.cache(show_spinner=False, suppress_st_warning=True)
 def ajustar_distribucion(datos, tipo_distribucion):
     # Ajustar la distribución utilizando distfit
     dfit = distfit(todf=True, distr=tipo_distribucion)
@@ -56,23 +54,22 @@ def ajustar_distribucion(datos, tipo_distribucion):
 def main():
     st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
 
-    # Botón para generar datos aleatorios
-    if st.button("Generar Datos Aleatorios"):
-        # Generar datos aleatorios
-        datos, distribucion_elegida = generar_datos_aleatorios()
+    # Generar datos aleatorios solo si es la primera ejecución o el botón es presionado
+    if "datos_generados" not in st.session_state or st.button("Generar Datos Aleatorios"):
+        st.session_state.datos_generados, st.session_state.distribucion_elegida = generar_datos_aleatorios()
 
-        # Mostrar la lista de los 1000 datos generados
-        st.subheader("Lista de Datos Generados:")
-        st.write(datos)
+    # Mostrar la lista de los 1000 datos generados
+    st.subheader("Lista de Datos Generados:")
+    st.write(st.session_state.datos_generados)
 
-        # Seleccionar tipo de distribución para ajuste
-        tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
+    # Seleccionar tipo de distribución para ajuste
+    tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
 
-        # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
-        fig = ajustar_distribucion(datos, tipo_distribucion)
+    # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
+    fig = ajustar_distribucion(st.session_state.datos_generados, tipo_distribucion)
 
-        # Mostrar la figura en Streamlit
-        st.pyplot(fig)
+    # Mostrar la figura en Streamlit
+    st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
