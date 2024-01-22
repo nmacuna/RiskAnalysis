@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
 from distfit import distfit
 
+@st.cache(show_spinner=False, suppress_st_warning=True)
 def generar_datos_aleatorios():
     distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniform']
     distribucion_elegida = np.random.choice(distribuciones)
@@ -33,6 +34,7 @@ def generar_datos_aleatorios():
     
     return datos, distribucion_elegida
 
+@st.cache(show_spinner=False, suppress_st_warning=True)
 def ajustar_distribucion(datos, tipo_distribucion):
     # Ajustar la distribución utilizando distfit
     dfit = distfit(todf=True, distr=tipo_distribucion)
@@ -71,9 +73,6 @@ def main():
 
         # Mostrar la figura en Streamlit
         st.pyplot(fig)
-
-        # Forzar la rerun de la aplicación cuando se cambia la distribución
-        st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
