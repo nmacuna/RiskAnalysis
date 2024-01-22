@@ -31,8 +31,14 @@ def generate_data(distribution, size, params):
 
 def plot_histogram_and_curve(data, bins, fitted_data, title):
     fig, ax = plt.subplots()
-    ax.hist(data, bins=bins, density=True, alpha=0.6, color='g', edgecolor='black', label='Histogram')
-    ax.plot(data, fitted_data, 'r-', label='Fitted Distribution')
+    n, bins, patches = ax.hist(data, bins=bins, density=True, alpha=0.6, color='g', edgecolor='black', label='Histogram')
+
+    # Calculate the bin centers
+    bin_centers = 0.5 * (bins[:-1] + bins[1:])
+
+    # Plot the fitted distribution
+    ax.plot(bin_centers, fitted_data, 'r-', label='Fitted Distribution')
+
     ax.set_title(title)
     ax.set_xlabel('Value')
     ax.set_ylabel('Frequency')
@@ -40,7 +46,7 @@ def plot_histogram_and_curve(data, bins, fitted_data, title):
     st.pyplot(fig)
 
 def fit_distribution(data, distribution):
-    params = getattr(stats, distribution).fit(data, floc=0)  # Using MLE with location fixed at 0 for non-negative distributions
+    params = getattr(stats, distribution).fit(data)
     fitted_data = getattr(stats, distribution)(*params).pdf(data)
 
     plot_histogram_and_curve(data, 20, fitted_data, 'Histogram and Fitted Distribution')
