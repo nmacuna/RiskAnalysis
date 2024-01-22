@@ -7,9 +7,8 @@ Created on Sun Jan 21 15:43:45 2024
 
 import streamlit as st
 import numpy as np
+from distfit import distfit
 import matplotlib.pyplot as plt
-import scipy.stats as stats
-from scipy.optimize import curve_fit
 
 def generate_random_data(size):
     distribution_type = np.random.choice(["Normal", "Lognormal", "Weibull", "Exponential"])
@@ -30,9 +29,14 @@ def generate_data(distribution, size, params):
         data = np.random.exponential(scale, size)
     return data
 
-def plot_histogram_and_curve(data, bins, fitted_data, title):
+def fit_distribution(data):
+    dist = distfit()
+    dist.fit_transform(data)
+    return dist
+
+def plot_histogram_and_curve(data, fitted_data, title):
     fig, ax = plt.subplots()
-    n, bins, patches = ax.hist(data, bins=bins, density=True, alpha=0.6, color='g', edgecolor='black', label='Histogram')
+    n, bins, patches = ax.hist(data, bins=20, density=True, alpha=0.6, color='g', edgecolor='black', label='Histogram')
 
     # Calculate the bin centers
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
@@ -48,16 +52,6 @@ def plot_histogram_and_curve(data, bins, fitted_data, title):
     ax.set_ylabel('Frequency')
     ax.legend()
     st.pyplot(fig)
-
-def fit_distribution(data, distribution, params):
-    try:
-        # Use curve_fit for non-linear optimization
-        x_values = np.linspace(min(data), max(data), len(data))
-        popt, pcov = curve_fit(getattr(stats, distribution).pdf, x_values, data, p0=params)
-        fitted_data = getattr(stats, distribution)(*popt).pdf(x_values)
-        plot_histogram_and_curve(data, 20, fitted_data, 'Histogram and Fitted Distribution')
-    except Exception as e:
-        st.warning(f"Failed to fit distribution: {e}")
 
 def main():
     if 'generated_data' not in st.session_state:
@@ -79,9 +73,8 @@ def main():
     # Fit distribution to data
     st.header("Histogram and Fitted Distribution")
     try:
-        fit_distribution_type = st.sidebar.selectbox("Select Distribution for Fitting", ["norm", "lognorm", "weibull_min", "expon"])
-        params = np.random.rand(2)  # Default parameters
-        fit_distribution(st.session_state.generated_data, fit_distribution_type, params)
+        dist = fit_distribution(st.session_state.generated_data)
+        plot_histogram_and_curve(st.session_state.generated_data, dist.hist_norm, 'Histogram and Fitted Distribution')
     except Exception as e:
         st.warning(f"Failed to fit distribution: {e}")
 
@@ -90,8 +83,6 @@ def main():
     st.write(f"Mean: {np.mean(st.session_state.generated_data)}")
     st.write(f"Median: {np.median(st.session_state.generated_data)}")
     st.write(f"Standard Deviation: {np.std(st.session_state.generated_data)}")
-    st.write(f"Kurtosis: {stats.kurtosis(st.session_state.generated_data)}")
-    st.write(f"Bias: {stats.skew(st.session_state.generated_data)}")
 
 if __name__ == "__main__":
     main()
