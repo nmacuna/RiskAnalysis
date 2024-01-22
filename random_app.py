@@ -45,12 +45,9 @@ def ajustar_distribucion(datos, tipo_distribucion):
     plt.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
     plt.legend()
 
-    # Ploteo de la distribución ajustada
-    x = np.linspace(min(datos), max(datos), 100)
-    y = dfit.model.pdf(x)
-    plt.plot(x, y, 'r-', label=f'Distribución {tipo_distribucion} ajustada')
-    plt.legend()
-
+    # Ploteo de la distribución ajustada utilizando distfit.plot()
+    dfit.plot()
+    
     return fig
 
 def main():
