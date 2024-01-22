@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
 from distfit import distfit
 
-@st.cache(suppress_st_warning=True)
 def generar_datos_aleatorios():
     distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniform']
     distribucion_elegida = np.random.choice(distribuciones)
@@ -55,37 +54,23 @@ def ajustar_distribucion(datos, tipo_distribucion):
 def main():
     st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
 
-    # Verificar si se ha seleccionado una distribución
-    distribucion_seleccionada = st.checkbox("Seleccionar Distribución para Ajuste")
-    
-    if distribucion_seleccionada:
+    # Botón para generar datos aleatorios
+    if st.button("Generar Datos Aleatorios"):
+        # Generar datos aleatorios
+        datos, distribucion_elegida = generar_datos_aleatorios()
+
+        # Mostrar la lista de los 1000 datos generados
+        st.subheader("Lista de Datos Generados:")
+        st.write(datos)
+
         # Seleccionar tipo de distribución para ajuste
         tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
 
-        # Botón para generar datos aleatorios
-        if st.button("Generar Datos Aleatorios"):
-            # Generar datos aleatorios
-            datos, distribucion_elegida = generar_datos_aleatorios()
+        # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
+        fig = ajustar_distribucion(datos, tipo_distribucion)
 
-            # Mostrar la lista de los 1000 datos generados
-            st.subheader("Lista de Datos Generados:")
-            st.write(datos)
-
-            # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
-            fig = ajustar_distribucion(datos, tipo_distribucion)
-
-            # Mostrar la figura en Streamlit en un espacio vacío
-            espacio_grafico = st.empty()
-            espacio_grafico.pyplot(fig)
-    else:
-        # Botón para generar datos aleatorios sin ajuste de distribución
-        if st.button("Generar Datos Aleatorios"):
-            # Generar datos aleatorios
-            datos, distribucion_elegida = generar_datos_aleatorios()
-
-            # Mostrar la lista de los 1000 datos generados
-            st.subheader("Lista de Datos Generados:")
-            st.write(datos)
+        # Mostrar la figura en Streamlit
+        st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
