@@ -8,8 +8,6 @@ Created on Sun Jan 21 15:43:45 2024
 import streamlit as st
 import numpy as np
 from distfit import distfit
-import matplotlib.pyplot as plt
-
 
 def generate_random_data(size):
     distribution_type = np.random.choice(["Normal", "Lognormal", "Weibull", "Exponential"])
@@ -23,7 +21,7 @@ def generate_data(distribution, size, params):
         mean, sigma = params  # Extract mean and standard deviation
         data = np.random.lognormal(mean, sigma, size)
     elif distribution == "Weibull":
-        data = np.random.weibull(*params, size)
+        data = np.random.weibull(params[0], size)  # Fix here
     elif distribution == "Exponential":
         scale = params[0]  # Extract scale parameter
         data = np.random.exponential(scale, size)
@@ -56,7 +54,7 @@ def main():
         generated_data = generate_random_data(data_size)
 
     # Fit distribution to data
-    st.header("Histogram and Fitted Distribution")
+    st.header("Fit Results")
     fit_distribution(generated_data)
 
     # Display statistics
@@ -64,8 +62,6 @@ def main():
     st.write(f"Mean: {np.mean(generated_data)}")
     st.write(f"Median: {np.median(generated_data)}")
     st.write(f"Standard Deviation: {np.std(generated_data)}")
-    st.write(f"Kurtosis: {stats.kurtosis(generated_data)}")
-    st.write(f"Bias: {stats.skew(generated_data)}")
 
 if __name__ == "__main__":
     main()
