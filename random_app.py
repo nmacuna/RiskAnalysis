@@ -12,19 +12,18 @@ import scipy.stats as stats
 
 def generate_random_data(size):
     distribution_type = np.random.choice(["Normal", "Lognormal", "Weibull", "Exponential"])
-    params = np.random.rand(3)  # Placeholder parameters
+    params = np.random.rand()  # Placeholder parameter
     return generate_data(distribution_type, size, params)
 
 def generate_data(distribution, size, params):
     if distribution == "Normal":
-        data = np.random.normal(*params, size)
+        data = np.random.normal(size=size)
     elif distribution == "Lognormal":
-        mean, sigma, _ = params  # Extract mean and standard deviation
-        data = np.random.lognormal(mean, sigma, size)
+        data = np.random.lognormal(*params, size)
     elif distribution == "Weibull":
         data = np.random.weibull(*params, size)
     elif distribution == "Exponential":
-        data = np.random.exponential(*params, size)
+        data = np.random.exponential(params, size)
     return data
 
 def plot_histogram(data, bins):
