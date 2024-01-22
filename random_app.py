@@ -9,6 +9,7 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
+from scipy.stats import mode
 from distfit import distfit
 
 def generar_datos_aleatorios():
@@ -76,7 +77,7 @@ def ajustar_distribucion(datos, tipo_distribucion):
     st.subheader("Estadísticas:")
     st.write(f"Media: {np.mean(datos)}")
     st.write(f"Mediana: {np.median(datos)}")
-    st.write(f"Moda: {float(st.mode(datos).mode[0]) if len(st.mode(datos).mode) > 0 else 'No hay moda'}")
+    st.write(f"Moda: {float(mode(datos).mode[0]) if len(mode(datos).mode) > 0 else 'No hay moda'}")
     st.write(f"Desviación Estándar: {np.std(datos)}")
     st.write(f"Varianza: {np.var(datos)}")
     st.write(f"Coeficiente de Variación: {np.std(datos) / np.mean(datos)}")
