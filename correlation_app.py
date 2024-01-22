@@ -26,23 +26,18 @@ def plot_scatter_with_stats(x, y, cov):
     ax.set_title('Generación de datos')
 
     # Draw mean lines
-    ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1, label='Media X')
-    ax.axhline(np.mean(y), color='black', linestyle='-', linewidth=1, label='Media Y')
+    ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1)
+    ax.axhline(np.mean(y), color='black', linestyle='-', linewidth=1)
 
     # Draw standard deviation lines
-    ax.axvline(np.mean(x) + np.std(x), color='black', linestyle='--', linewidth=1, label='+1 Desv. Est. X')
-    ax.axvline(np.mean(x) - np.std(x), color='black', linestyle='--', linewidth=1, label='-1 Desv. Est. X')
-    ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1, label='+1 Desv. Est. Y')
-    ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1, label='-1 Desv. Est. Y')
+    ax.axvline(np.mean(x) + np.std(x), color='black', linestyle='--', linewidth=1)
+    ax.axvline(np.mean(x) - np.std(x), color='black', linestyle='--', linewidth=1)
+    ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1)
+    ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1)
 
-    # Covariance and correlation coefficient
-    cov_text = f'Covarianza: {cov[0, 1]:.2f}\nCoef. de Correlación: {np.corrcoef(x, y)[0, 1]:.2f}'
-    ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
-
-    # Labels and legend
+    # Labels
     ax.set_xlabel('Variable X')
     ax.set_ylabel('Variable Y')
-    ax.legend()
 
     return fig
 
@@ -61,10 +56,6 @@ def plot_regression(x, y):
     # Coefficient of determination (r^2)
     r_squared = r_value**2
     ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
-
-    # Covariance and correlation coefficient
-    cov_text = f'Covarianza: {np.cov(x, y)[0, 1]:.2f}\nCoef. de Correlación: {np.corrcoef(x, y)[0, 1]:.2f}'
-    ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
 
     # Labels and legend
     ax.set_xlabel('Variable X')
