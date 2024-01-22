@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
-from scipy.stats import mode, skew
+from scipy.stats import mode, skew, kurtosis, entropy
 from distfit import distfit
 
 def generar_datos_aleatorios():
@@ -83,8 +83,8 @@ def ajustar_distribucion(datos, tipo_distribucion):
     st.write(f"Percentil 75: {round(np.percentile(datos, 75), 3)}")
     st.write(f"Rango Interquartílico (IQR): {round(np.percentile(datos, 75) - np.percentile(datos, 25), 3)}")
     st.write(f"Coeficiente de Asimetría: {round(float(skew(datos)), 3)}")
-    st.write(f"Curtosis: {round(st.kurtosis(datos), 3)}")
-    st.write(f"Entropía: {round(st.entropy(np.histogram(datos, bins='auto')[0]), 3)}")
+    st.write(f"Curtosis: {round(float(kurtosis(datos)), 3)}")
+    st.write(f"Entropía: {round(float(entropy(datos)), 3)}")
 
     return fig
 
