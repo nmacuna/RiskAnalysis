@@ -36,6 +36,9 @@ def plot_histogram_and_curve(data, bins, fitted_data, title):
     # Calculate the bin centers
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
 
+    # Ensure fitted_data has the same length as bin_centers
+    fitted_data = fitted_data[:len(bin_centers)]
+
     # Plot the fitted distribution
     ax.plot(bin_centers, fitted_data, 'r-', label='Fitted Distribution')
 
@@ -44,6 +47,7 @@ def plot_histogram_and_curve(data, bins, fitted_data, title):
     ax.set_ylabel('Frequency')
     ax.legend()
     st.pyplot(fig)
+
 
 def fit_distribution(data, distribution):
     params = getattr(stats, distribution).fit(data)
