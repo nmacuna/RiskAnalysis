@@ -9,16 +9,16 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
-from scipy.stats import linregress  # Importa linregress desde scipy.stats
+from scipy.stats import linregress
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
     cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
                     [correlation * std_dev_x * std_dev_y, std_dev_y**2]])
     mean = [mean_x, mean_y]
     x, y = np.random.multivariate_normal(mean, cov, size).T
-    return x, y
+    return x, y, cov
 
-def plot_scatter_with_regression(x, y):
+def plot_scatter_with_regression(x, y, cov):
     fig, ax = plt.subplots()
 
     # Scatter plot
@@ -33,6 +33,10 @@ def plot_scatter_with_regression(x, y):
     # Coeficiente de determinación (r^2)
     r_squared = r_value**2
     ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
+
+    # Covarianza y coeficiente de correlación
+    cov_text = f'Covarianza: {cov[0, 1]:.2f}\nCoef. de Correlación: {np.corrcoef(x, y)[0, 1]:.2f}'
+    ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
 
     # Etiquetas y leyenda
     ax.set_xlabel('Variable X')
@@ -57,10 +61,10 @@ def main():
 
     # Generate data with correlation, mean, and standard deviation
     data_size = 100
-    x_data, y_data = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
+    x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot the scatter plot with regression line and r^2
-    fig = plot_scatter_with_regression(x_data, y_data)
+    # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
+    fig = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
     st.pyplot(fig)
 
 if __name__ == "__main__":
