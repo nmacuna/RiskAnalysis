@@ -35,6 +35,19 @@ def plot_scatter_with_stats(x, y, cov):
     ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1)
     ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1)
 
+    # Draw histograms near the axes
+    axinset_x = fig.add_axes([0.55, 0.2, 0.25, 0.25])
+    axinset_x.hist(x, bins=20, color='blue', alpha=0.7, orientation='vertical')
+    axinset_x.set_title('Distribución de X')
+    axinset_x.yaxis.tick_right()
+    axinset_x.xaxis.set_visible(False)
+
+    axinset_y = fig.add_axes([0.2, 0.55, 0.25, 0.25])
+    axinset_y.hist(y, bins=20, color='green', alpha=0.7, orientation='horizontal')
+    axinset_y.set_title('Distribución de Y')
+    axinset_y.xaxis.tick_top()
+    axinset_y.yaxis.set_visible(False)
+
     # Labels
     ax.set_xlabel('Variable X')
     ax.set_ylabel('Variable Y')
