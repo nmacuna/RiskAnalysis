@@ -7,10 +7,11 @@ Created on Sun Jan 21 15:43:45 2024
 
 import streamlit as st
 import numpy as np
-import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib.pyplot as plt
 from PIL import Image
 from scipy.stats import linregress
+import pandas as pd  # Add this import for DataFrame
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
     cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
@@ -46,21 +47,26 @@ def plot_scatter_with_regression(x, y, cov):
 
     return fig
 
-def plot_jointplot_with_means(x, y, mean_x, mean_y, std_dev_x, std_dev_y):
-    # Create a joint plot with histograms
-    g = sns.jointplot(x=x, y=y, kind='scatter', marginal_kws=dict(bins=25, fill=False), s=100, edgecolor="w", linewidth=1)
+def plot_scatter_with_regression_and_histograms(x, y):
+    # Create a DataFrame for Seaborn
+    df = pd.DataFrame({'X': x, 'Y': y})
 
-    # Plot means and std deviations
-    g.ax_joint.axvline(mean_x, color='blue', linestyle='-', linewidth=1, label=f'Mean X: {mean_x:.2f}')
-    g.ax_joint.axvline(mean_x + std_dev_x, color='blue', linestyle='--', linewidth=1, label=f'Mean X + Std Dev: {mean_x + std_dev_x:.2f}')
-    g.ax_joint.axvline(mean_x - std_dev_x, color='blue', linestyle='--', linewidth=1, label=f'Mean X - Std Dev: {mean_x - std_dev_x:.2f}')
+    # Create a jointplot without the regression line
+    sns.set(style="white", color_codes=True)
+    g = sns.jointplot(x="X", y="Y", data=df, kind="scatter", marginal_kws=dict(bins=20, fill=False))
 
-    g.ax_joint.axhline(mean_y, color='green', linestyle='-', linewidth=1, label=f'Mean Y: {mean_y:.2f}')
-    g.ax_joint.axhline(mean_y + std_dev_y, color='green', linestyle='--', linewidth=1, label=f'Mean Y + Std Dev: {mean_y + std_dev_y:.2f}')
-    g.ax_joint.axhline(mean_y - std_dev_y, color='green', linestyle='--', linewidth=1, label=f'Mean Y - Std Dev: {mean_y - std_dev_y:.2f}')
+    # Access the axes and plot mean and standard deviation lines
+    ax = g.ax_joint
+    ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1)
+    ax.axhline(np.mean(y), color='black', linestyle='-', linewidth=1)
+    ax.axvline(np.mean(x) + np.std(x), color='black', linestyle='--', linewidth=1)
+    ax.axvline(np.mean(x) - np.std(x), color='black', linestyle='--', linewidth=1)
+    ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1)
+    ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1)
 
-    # Add legend
-    g.ax_joint.legend()
+    # Save the plot with correct size
+    plt.figure(figsize=(4, 4))
+    plt.savefig("marginal_plot_with_regression_line_Seaborn.png", dpi=150)
 
     return g
 
@@ -82,14 +88,13 @@ def main():
     data_size = 100
     x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot the jointplot with means and std deviations
-    jointplot_fig = plot_jointplot_with_means(x_data, y_data, mean_x, mean_y, std_dev_x, std_dev_y)
-
     # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
-    scatterplot_fig = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
+    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
+    st.pyplot(fig_scatter)
 
-    # Display side by side
-    st.pyplot(jointplot_fig, scatterplot_fig)
+    # Plot scatter plot with marginal histograms
+    fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
+    st.pyplot(fig_seaborn)
 
 if __name__ == "__main__":
     main()
