@@ -34,51 +34,52 @@ def generar_datos_aleatorios():
     
     return datos, distribucion_elegida
 
-def ajustar_distribucion(datos, tipo_distribucion, ax):
+def ajustar_distribucion(datos, tipo_distribucion):
     dist = distfit()
     try:
         dist.fit_transform(datos)
 
         # Ploteo del histograma
-        ax.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
+        plt.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
 
         # Ploteo de la distribución ajustada
-        dist.plot(tipo_distribucion, ax=ax)
-        ax.legend()
+        dist.plot(tipo_distribucion)
+
+        plt.legend()
+        st.pyplot()
     except Exception as e:
         st.error(f"Error al ajustar la distribución: {str(e)}")
 
 def main():
     st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
 
-    # Obtener el espacio para la salida
-    output_space = st.empty()
-
     # Botón para generar datos aleatorios
     if st.button("Generar Datos Aleatorios"):
         # Generar datos aleatorios (utilizando st.cache)
         datos, distribucion_elegida = generar_datos_aleatorios()
 
-        # Crear figura y eje
+        # Mostrar la lista de los 1000 datos generados
+        st.subheader("Lista de Datos Generados:")
+        st.write(datos)
+
+        # Crear figura para el histograma y la distribución ajustada
         fig, ax = plt.subplots()
 
-        # Histograma y ajuste de distribución
-        ajustar_distribucion(datos, distribucion_elegida, ax)
+        # Histograma
+        plt.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
+        plt.legend()
 
         # Información sobre la distribución generada
         st.subheader(f"Distribución Generada: {distribucion_elegida}")
 
-        # Mostrar la figura
-        output_space.pyplot(fig)
+        # Mostrar la figura con el histograma
+        st.pyplot(fig)
 
         # Seleccionar tipo de distribución para ajuste
         tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
 
-        # Actualizar figura con la nueva distribución seleccionada
-        ajustar_distribucion(datos, tipo_distribucion, ax)
-
-        # Mostrar la figura actualizada
-        output_space.pyplot(fig)
+        # Ajustar distribución y mostrar la figura actualizada
+        ajustar_distribucion(datos, tipo_distribucion)
 
 if __name__ == "__main__":
     main()
