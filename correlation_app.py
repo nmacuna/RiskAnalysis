@@ -36,10 +36,12 @@ def plot_scatter_with_regression_and_histograms(x, y):
     ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1)
     ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1)
 
-    # Save the plot
-    plt.savefig("marginal_plot_with_regression_line_Seaborn.png", figsize=(4, 4), dpi=150)
+    # Save the plot with correct size
+    plt.figure(figsize=(4, 4))
+    plt.savefig("marginal_plot_with_regression_line_Seaborn.png", dpi=150)
 
     return g
+
 
 def main():
     st.title("Scatter Plot with Marginal Histograms and Regression Line (Seaborn)")
