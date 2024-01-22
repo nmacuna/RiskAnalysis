@@ -12,43 +12,42 @@ import scipy.stats as stats
 
 def generate_random_data(size):
     distribution_type = np.random.choice(["Normal", "Lognormal", "Weibull", "Exponential"])
-    params = np.random.rand()  # Placeholder parameter
+    params = np.random.rand(2)  # Two parameters for lognormal distribution
     return generate_data(distribution_type, size, params)
 
 def generate_data(distribution, size, params):
     if distribution == "Normal":
         data = np.random.normal(size=size)
     elif distribution == "Lognormal":
-        data = np.random.lognormal(*params, size)
+        mean, sigma = params  # Extract mean and standard deviation
+        data = np.random.lognormal(mean, sigma, size)
     elif distribution == "Weibull":
         data = np.random.weibull(*params, size)
     elif distribution == "Exponential":
         data = np.random.exponential(params, size)
     return data
 
-def plot_histogram(data, bins):
+def plot_histogram_and_curve(data, bins, fitted_data, title):
     fig, ax = plt.subplots()
-    ax.hist(data, bins=bins, density=True, alpha=0.6, color='g', edgecolor='black')
-    ax.set_title('Histogram')
+    ax.hist(data, bins=bins, density=True, alpha=0.6, color='g', edgecolor='black', label='Histogram')
+    ax.plot(data, fitted_data, 'r-', label='Fitted Distribution')
+    ax.set_title(title)
     ax.set_xlabel('Value')
     ax.set_ylabel('Frequency')
+    ax.legend()
     st.pyplot(fig)
 
 def fit_distribution(data, distribution):
     params = getattr(stats, distribution).fit(data)
     fitted_data = getattr(stats, distribution)(*params).pdf(data)
 
-    fig, ax = plt.subplots()
-    ax.plot(data, fitted_data, 'r-', label='Fitted Distribution')
-    ax.legend()
-    st.pyplot(fig)
+    plot_histogram_and_curve(data, 20, fitted_data, 'Histogram and Fitted Distribution')
 
 def main():
     st.title("Random Number Generator and Distribution Fitting")
 
     # Sidebar for user input
     data_size = st.sidebar.slider("Data Size", 100, 10000, 1000, step=100)
-    bins = st.sidebar.slider("Number of Bins", 5, 100, 20)
     fit_distribution_type = st.sidebar.selectbox("Select Distribution for Fitting", ["norm", "lognorm", "weibull_min", "expon"])
 
     # Generate random data
@@ -59,12 +58,8 @@ def main():
     if st.button("Generate New Data"):
         generated_data = generate_random_data(data_size)
 
-    # Plot histogram
-    st.header("Histogram of Generated Data")
-    plot_histogram(generated_data, bins)
-
     # Fit distribution to data
-    st.header("Fitted Distribution")
+    st.header("Histogram and Fitted Distribution")
     fit_distribution(generated_data, fit_distribution_type)
 
     # Display statistics
