@@ -7,7 +7,6 @@ Created on Sun Jan 21 15:43:45 2024
 
 import streamlit as st
 import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
 from PIL import Image
 from scipy.stats import linregress
@@ -19,53 +18,28 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
     x, y = np.random.multivariate_normal(mean, cov, size).T
     return x, y, cov
 
-def plot_scatter_with_marginal_histograms(x, y):
-    fig, ax = plt.subplots()
+def scatter_hist(x, y, ax, ax_histx, ax_histy):
+    ax_histx.tick_params(axis="x", labelbottom=False)
+    ax_histy.tick_params(axis="y", labelleft=False)
 
-    # Scatter plot
-    sns.scatterplot(x=x, y=y, ax=ax, alpha=0.5)
+    ax.scatter(x, y, alpha=0.5)
 
-    # Marginal histograms
-    sns.histplot(x=x, ax=ax, bins=20, color='blue', kde=False, stat='density', element='step', fill=False)
-    sns.histplot(y=y, ax=ax, bins=20, color='green', kde=False, stat='density', element='step', fill=False, orientation='horizontal')
+    binwidth = 0.25
+    xymax = max(np.max(np.abs(x)), np.max(np.abs(y)))
+    lim = (int(xymax/binwidth) + 1) * binwidth
 
-    # Draw mean lines
-    ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1)
-    ax.axhline(np.mean(y), color='black', linestyle='-', linewidth=1)
+    bins = np.arange(-lim, lim + binwidth, binwidth)
+    ax_histx.hist(x, bins=bins, color='black', alpha=0.7)
+    ax_histy.hist(y, bins=bins, orientation='horizontal', color='black', alpha=0.7)
 
-    # Draw standard deviation lines
-    ax.axvline(np.mean(x) + np.std(x), color='black', linestyle='--', linewidth=1)
-    ax.axvline(np.mean(x) - np.std(x), color='black', linestyle='--', linewidth=1)
-    ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1)
-    ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1)
+# Definitions for the axes
+left, width = 0.1, 0.65
+bottom, height = 0.1, 0.65
+spacing = 0.005
 
-    # Labels
-    ax.set_xlabel('Variable X')
-    ax.set_ylabel('Variable Y')
-
-    return fig
-
-def plot_regression(x, y):
-    fig, ax = plt.subplots()
-
-    # Scatter plot
-    sns.scatterplot(x=x, y=y, ax=ax, alpha=0.5)
-
-    # Linear regression
-    slope, intercept, r_value, p_value, std_err = linregress(x, y)
-    line = slope * x + intercept
-    ax.plot(x, line, color='red', label=f'Regresión lineal: y = {slope:.2f}x + {intercept:.2f}')
-
-    # Coefficient of determination (r^2)
-    r_squared = r_value**2
-    ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
-
-    # Labels and legend
-    ax.set_xlabel('Variable X')
-    ax.set_ylabel('Variable Y')
-    ax.legend()
-
-    return fig
+rect_scatter = [left, bottom, width, height]
+rect_histx = [left, bottom + height + spacing, width, 0.2]
+rect_histy = [left + width + spacing, bottom, 0.2, height]
 
 def main():
     # Banner image
@@ -85,13 +59,18 @@ def main():
     data_size = 100
     x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot scatter plot with marginal histograms
-    fig_marginal_histograms = plot_scatter_with_marginal_histograms(x_data, y_data)
-    st.pyplot(fig_marginal_histograms)
+    # Start with a square Figure
+    fig = plt.figure(figsize=(8, 8))
 
-    # Plot regression line and parameters
-    fig_regression = plot_regression(x_data, y_data)
-    st.pyplot(fig_regression)
+    ax = fig.add_axes(rect_scatter)
+    ax_histx = fig.add_axes(rect_histx, sharex=ax)
+    ax_histy = fig.add_axes(rect_histy, sharey=ax)
+
+    # Use the previously defined function
+    scatter_hist(x_data, y_data, ax, ax_histx, ax_histy)
+
+    # Show the plot using Streamlit
+    st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
