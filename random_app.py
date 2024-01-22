@@ -71,5 +71,14 @@ def main():
         # Mostrar la figura
         output_space.pyplot(fig)
 
+        # Seleccionar tipo de distribución para ajuste
+        tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
+
+        # Actualizar figura con la nueva distribución seleccionada
+        ajustar_distribucion(datos, tipo_distribucion, ax)
+
+        # Mostrar la figura actualizada
+        output_space.pyplot(fig)
+
 if __name__ == "__main__":
     main()
