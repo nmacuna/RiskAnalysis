@@ -71,8 +71,13 @@ def plot_scatter_with_regression_and_histograms(x, y):
     # Display legend
     g.ax_joint.legend()
 
-    # Display the joint plot using st.pyplot()
-    st.pyplot(g)
+    # Save the joint plot to a BytesIO buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+
+    # Display the joint plot using st.image()
+    st.image(buffer, caption='Scatter Plot with Regression', use_column_width=True, format='png')
 
 
 def main():
