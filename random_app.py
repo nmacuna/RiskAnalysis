@@ -10,6 +10,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
+def generate_random_data(size):
+    distribution_type = np.random.choice(["Normal", "Lognormal", "Weibull", "Exponential"])
+    params = np.random.rand(3)  # Placeholder parameters
+    return generate_data(distribution_type, size, params)
+
 def generate_data(distribution, size, params):
     if distribution == "Normal":
         data = np.random.normal(*params, size)
@@ -46,21 +51,11 @@ def main():
 
     # Generate random data
     st.header("Generated Random Data")
-
-    # Randomly choose distribution at the beginning
-    initial_distribution = np.random.choice(["Normal", "Lognormal", "Weibull", "Exponential"])
-    data_params = st.text_area(f"Enter {initial_distribution} distribution parameters (comma-separated)", "1.0, 1.0, 1.0").split(',')
-    data_params = [float(param) for param in data_params]
-    generated_data = generate_data(initial_distribution, data_size, data_params)
+    generated_data = generate_random_data(data_size)
 
     # Generate new data button
     if st.button("Generate New Data"):
-        # Randomly choose a new distribution
-        distribution_type = np.random.choice(["Normal", "Lognormal", "Weibull", "Exponential"])
-        st.text(f"Generating new data with {distribution_type} distribution.")
-        data_params = st.text_area(f"Enter {distribution_type} distribution parameters (comma-separated)", "1.0, 1.0, 1.0").split(',')
-        data_params = [float(param) for param in data_params]
-        generated_data = generate_data(distribution_type, data_size, data_params)
+        generated_data = generate_random_data(data_size)
 
     # Plot histogram
     st.header("Histogram of Generated Data")
