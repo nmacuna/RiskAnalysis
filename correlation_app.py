@@ -10,65 +10,86 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from PIL import Image
-import pandas as pd
+from scipy.stats import linregress
 
-def plot_scatter_with_histograms(x, y):
-    # Create figure and gridspec
-    fig, (ax_scatter, ax_hist_x, ax_hist_y) = plt.subplots(2, 2, figsize=(12, 6), gridspec_kw={'height_ratios': [4, 1], 'width_ratios': [4, 1]})
+def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
+    cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
+                    [correlation * std_dev_x * std_dev_y, std_dev_y**2]])
+    mean = [mean_x, mean_y]
+    x, y = np.random.multivariate_normal(mean, cov, size).T
+    return x, y, cov
+
+def plot_scatter_with_regression(x, y, cov):
+    fig, ax = plt.subplots()
 
     # Scatter plot
-    sns.scatterplot(x=x, y=y, ax=ax_scatter, alpha=0.5)
-    ax_scatter.set_xlabel('X')
-    ax_scatter.set_ylabel('Y')
+    ax.scatter(x, y, alpha=0.5)
+    ax.set_title('Generación de datos')
 
-    # Marginal histograms
-    sns.histplot(x=x, ax=ax_hist_x, bins=20, color='black', kde=False)
-    ax_hist_x.set_ylabel('')
-    
-    sns.histplot(y=y, ax=ax_hist_y, bins=20, color='black', kde=False, orientation='horizontal')
-    ax_hist_y.set_xlabel('')
+    # Regresión lineal
+    slope, intercept, r_value, p_value, std_err = linregress(x, y)
+    line = slope * x + intercept
+    ax.plot(x, line, color='red', label=f'Regresión lineal: y = {slope:.2f}x + {intercept:.2f}')
 
-    # Mean and std lines
-    mean_x, mean_y = np.mean(x), np.mean(y)
-    std_x, std_y = np.std(x), np.std(y)
+    # Coeficiente de determinación (r^2)
+    r_squared = r_value**2
+    ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
 
-    ax_hist_x.axvline(mean_x, color='black', linestyle='-', linewidth=2)
-    ax_hist_x.axvline(mean_x + std_x, color='black', linestyle='--', linewidth=2)
-    ax_hist_x.axvline(mean_x - std_x, color='black', linestyle='--', linewidth=2)
+    # Covarianza y coeficiente de correlación
+    cov_text = f'Covarianza: {cov[0, 1]:.2f}\nCoef. de Correlación: {np.corrcoef(x, y)[0, 1]:.2f}'
+    ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
 
-    ax_hist_y.axhline(mean_y, color='black', linestyle='-', linewidth=2)
-    ax_hist_y.axhline(mean_y + std_y, color='black', linestyle='--', linewidth=2)
-    ax_hist_y.axhline(mean_y - std_y, color='black', linestyle='--', linewidth=2)
-
-    # Hide the spines between ax and ax_hist_x/y
-    ax_scatter.spines['top'].set_visible(False)
-    ax_scatter.spines['right'].set_visible(False)
-    ax_hist_x.spines['bottom'].set_visible(False)
-    ax_hist_y.spines['left'].set_visible(False)
-
-    ax_hist_x.tick_params(bottom=False, labelbottom=False)
-    ax_hist_y.tick_params(left=False, labelleft=False)
-
-    plt.subplots_adjust(wspace=0, hspace=0)
+    # Etiquetas y leyenda
+    ax.set_xlabel('Variable X')
+    ax.set_ylabel('Variable Y')
+    ax.legend()
 
     return fig
 
+def plot_jointplot_with_means(x, y, mean_x, mean_y, std_dev_x, std_dev_y):
+    # Create a joint plot with histograms
+    g = sns.jointplot(x=x, y=y, kind='scatter', marginal_kws=dict(bins=25, fill=False), s=100, edgecolor="w", linewidth=1)
+
+    # Plot means and std deviations
+    g.ax_joint.axvline(mean_x, color='blue', linestyle='-', linewidth=1, label=f'Mean X: {mean_x:.2f}')
+    g.ax_joint.axvline(mean_x + std_dev_x, color='blue', linestyle='--', linewidth=1, label=f'Mean X + Std Dev: {mean_x + std_dev_x:.2f}')
+    g.ax_joint.axvline(mean_x - std_dev_x, color='blue', linestyle='--', linewidth=1, label=f'Mean X - Std Dev: {mean_x - std_dev_x:.2f}')
+
+    g.ax_joint.axhline(mean_y, color='green', linestyle='-', linewidth=1, label=f'Mean Y: {mean_y:.2f}')
+    g.ax_joint.axhline(mean_y + std_dev_y, color='green', linestyle='--', linewidth=1, label=f'Mean Y + Std Dev: {mean_y + std_dev_y:.2f}')
+    g.ax_joint.axhline(mean_y - std_dev_y, color='green', linestyle='--', linewidth=1, label=f'Mean Y - Std Dev: {mean_y - std_dev_y:.2f}')
+
+    # Add legend
+    g.ax_joint.legend()
+
+    return g
+
 def main():
-    st.title('Scatter Plot Analysis')
+    # Banner image
+    banner_image = Image.open("Confiabilidad_imagen.jpeg")
+    st.image(banner_image, use_column_width=True)
 
-    # Sample data (replace this with your data)
-    np.random.seed(42)
-    x_data = np.random.randn(100)
-    y_data = 2 * x_data + np.random.randn(100)
+    st.title("Confiabilidad y análisis de riesgo  Visualizador de correlación")
 
-    # First Figure: Scatter plot with histograms and mean/std lines
-    fig_histograms = plot_scatter_with_histograms(x_data, y_data)
-    
-    # Convert the figure to an image
-    image_histograms = Image.fromarray(fig_histograms.canvas.tostring_rgb())
+    # Sidebar for user input
+    correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
+    mean_x = st.sidebar.slider("Media variable X", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_x = st.sidebar.slider("Desviación estándar variable X", 0.1, 10.0, 1.0, step=0.1)
+    mean_y = st.sidebar.slider("Media variable Y", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_y = st.sidebar.slider("Desviación estándar variable Y", 0.1, 10.0, 1.0, step=0.1)
 
-    # Display the image
-    st.image(image_histograms, caption='Scatter Plot with Histograms and Mean/Std Lines', use_column_width=True)
+    # Generate data with correlation, mean, and standard deviation
+    data_size = 100
+    x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
+
+    # Plot the jointplot with means and std deviations
+    jointplot_fig = plot_jointplot_with_means(x_data, y_data, mean_x, mean_y, std_dev_x, std_dev_y)
+
+    # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
+    scatterplot_fig = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
+
+    # Display side by side
+    st.pyplot(jointplot_fig, scatterplot_fig)
 
 if __name__ == "__main__":
     main()
