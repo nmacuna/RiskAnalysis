@@ -32,20 +32,17 @@ def generar_datos_aleatorios():
     
     return datos, distribucion_elegida
 
-def ajustar_distribucion(datos, tipo_distribucion):
+def ajustar_distribucion(datos, tipo_distribucion, ax):
     dist = distfit()
     try:
         dist.fit_transform(datos)
 
         # Ploteo del histograma
-        fig, ax = plt.subplots()
-        plt.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
+        ax.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
 
         # Ploteo de la distribución ajustada
         dist.plot(tipo_distribucion, ax=ax)
-        plt.legend()
-
-        st.pyplot(fig)
+        ax.legend()
     except Exception as e:
         st.error(f"Error al ajustar la distribución: {str(e)}")
 
@@ -56,13 +53,19 @@ def main():
     if st.button("Generar Datos Aleatorios"):
         datos, distribucion_elegida = generar_datos_aleatorios()
 
+        # Crear figura y eje
+        fig, ax = plt.subplots()
+
         # Histograma
         st.subheader("Histograma de Datos Generados y Ajuste de Distribución")
         tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
-        ajustar_distribucion(datos, tipo_distribucion)
+        ajustar_distribucion(datos, tipo_distribucion, ax)
 
         # Información sobre la distribución generada
         st.subheader(f"Distribución Generada: {distribucion_elegida}")
+
+        # Mostrar la figura
+        st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
