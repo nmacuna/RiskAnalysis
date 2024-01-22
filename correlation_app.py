@@ -51,9 +51,9 @@ def plot_scatter_with_regression_and_histograms(x, y):
     # Create a DataFrame for Seaborn
     df = pd.DataFrame({'X': x, 'Y': y})
 
-    # Create a jointplot with regression line
+    # Create a jointplot without the regression line
     sns.set(style="white", color_codes=True)
-    g = sns.jointplot(x="X", y="Y", kind="reg", data=df)
+    g = sns.jointplot(x="X", y="Y", data=df, kind="scatter", marginal_kws=dict(bins=20, fill=False))
 
     # Access the axes and plot mean and standard deviation lines
     ax = g.ax_joint
@@ -88,13 +88,13 @@ def main():
     data_size = 100
     x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
-    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
-    st.pyplot(fig_scatter)
-
     # Plot scatter plot with marginal histograms
     fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
     st.pyplot(fig_seaborn)
+    
+    # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
+    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
+    st.pyplot(fig_scatter)
 
 if __name__ == "__main__":
     main()
