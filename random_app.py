@@ -54,23 +54,26 @@ def ajustar_distribucion(datos, tipo_distribucion):
 def main():
     st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
 
+    # Crear un contenedor para organizar el diseño
+    container = st.container()
+
     # Botón para generar datos aleatorios
-    if st.button("Generar Datos Aleatorios"):
+    if container.button("Generar Datos Aleatorios"):
         # Generar datos aleatorios
         datos, distribucion_elegida = generar_datos_aleatorios()
 
         # Mostrar la lista de los 1000 datos generados
-        st.subheader("Lista de Datos Generados:")
-        st.write(datos)
+        container.subheader("Lista de Datos Generados:")
+        container.write(datos)
 
         # Seleccionar tipo de distribución para ajuste
-        tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
+        tipo_distribucion = container.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
 
         # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
         fig = ajustar_distribucion(datos, tipo_distribucion)
 
         # Mostrar la figura en Streamlit
-        st.pyplot(fig)
+        container.pyplot(fig)
 
 if __name__ == "__main__":
     main()
