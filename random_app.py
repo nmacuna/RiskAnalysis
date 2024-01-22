@@ -10,8 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
 
-# Utilizamos st.cache para almacenar el resultado de la generación de datos
-@st.cache(allow_output_mutation=True)
 def generar_datos_aleatorios():
     distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniform']
     distribucion_elegida = np.random.choice(distribuciones)
@@ -77,7 +75,7 @@ def main():
 
     # Botón para generar datos aleatorios
     if st.button("Generar Datos Aleatorios"):
-        # Generar datos aleatorios (utilizando st.cache)
+        # Generar datos aleatorios (sin usar st.cache para esta función específica)
         datos, distribucion_elegida = generar_datos_aleatorios()
 
         # Mostrar la lista de los 1000 datos generados
