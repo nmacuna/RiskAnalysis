@@ -10,6 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from distfit import distfit
 
+# Utilizamos st.cache para almacenar el resultado de la generación de datos
+@st.cache(allow_output_mutation=True)
 def generar_datos_aleatorios():
     distribuciones = ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform']
     distribucion_elegida = np.random.choice(distribuciones)
@@ -49,23 +51,25 @@ def ajustar_distribucion(datos, tipo_distribucion, ax):
 def main():
     st.title("App de Generación de Datos Aleatorios y Ajuste de Distribuciones")
 
+    # Obtener el espacio para la salida
+    output_space = st.empty()
+
     # Botón para generar datos aleatorios
     if st.button("Generar Datos Aleatorios"):
+        # Generar datos aleatorios (utilizando st.cache)
         datos, distribucion_elegida = generar_datos_aleatorios()
 
         # Crear figura y eje
         fig, ax = plt.subplots()
 
-        # Histograma
-        st.subheader("Histograma de Datos Generados y Ajuste de Distribución")
-        tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
-        ajustar_distribucion(datos, tipo_distribucion, ax)
+        # Histograma y ajuste de distribución
+        ajustar_distribucion(datos, distribucion_elegida, ax)
 
         # Información sobre la distribución generada
         st.subheader(f"Distribución Generada: {distribucion_elegida}")
 
         # Mostrar la figura
-        st.pyplot(fig)
+        output_space.pyplot(fig)
 
 if __name__ == "__main__":
     main()
