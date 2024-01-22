@@ -7,6 +7,7 @@ Created on Sun Jan 21 15:43:45 2024
 
 import streamlit as st
 import numpy as np
+import pandas as pd  # Add this line
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
