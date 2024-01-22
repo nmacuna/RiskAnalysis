@@ -53,15 +53,6 @@ def plot_scatter_with_histograms(x, y):
 
     return fig
 
-def plot_scatter_with_regression(x, y):
-    # Create DataFrame for Seaborn
-    df = pd.DataFrame({'X': x, 'Y': y})
-
-    # Create figure using Seaborn
-    fig = sns.jointplot(x="X", y="Y", kind="reg", data=df)
-
-    return fig
-
 def main():
     st.title('Scatter Plot Analysis')
 
@@ -74,16 +65,10 @@ def main():
     fig_histograms = plot_scatter_with_histograms(x_data, y_data)
     
     # Convert the figure to an image
-    image_histograms = Image.fromarray(fig2data(fig_histograms))
+    image_histograms = Image.fromarray(fig_histograms.canvas.tostring_rgb())
 
     # Display the image
     st.image(image_histograms, caption='Scatter Plot with Histograms and Mean/Std Lines', use_column_width=True)
-
-    # Second Figure: Scatter plot with regression
-    fig_regression = plot_scatter_with_regression(x_data, y_data)
-
-    # Display the Seaborn figure
-    st.pyplot(fig_regression)
 
 if __name__ == "__main__":
     main()
