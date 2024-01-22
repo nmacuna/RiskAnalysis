@@ -24,7 +24,8 @@ def generate_data(distribution, size, params):
     elif distribution == "Weibull":
         data = np.random.weibull(*params, size)
     elif distribution == "Exponential":
-        data = np.random.exponential(params, size)
+        scale = params[0]  # Extract scale parameter
+        data = np.random.exponential(scale, size)
     return data
 
 def plot_histogram_and_curve(data, bins, fitted_data, title):
