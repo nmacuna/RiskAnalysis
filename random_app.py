@@ -4,7 +4,6 @@ Created on Sun Jan 21 15:43:45 2024
 
 @author: nm.acuna
 """
-
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
@@ -65,6 +64,27 @@ def ajustar_distribucion(datos, tipo_distribucion):
     # Ploteo de la distribución ajustada sobre el histograma normalizado
     plt.plot(x, y, 'r-', label=f'Distribución {tipo_distribucion} ajustada')
     plt.legend()
+
+    # Mostrar parámetros y estadísticas
+    st.subheader("Parámetros de la Distribución Ajustada:")
+    st.write(f"Loc: {loc}")
+    st.write(f"Scale: {scale}")
+    if 'arg' in dfit.model:
+        st.write(f"Argumentos Adicionales: {dfit.model['arg']}")
+
+    st.subheader("Estadísticas:")
+    st.write(f"Media: {np.mean(datos)}")
+    st.write(f"Mediana: {np.median(datos)}")
+    st.write(f"Moda: {st.mode(datos).mode[0]}")
+    st.write(f"Desviación Estándar: {np.std(datos)}")
+    st.write(f"Varianza: {np.var(datos)}")
+    st.write(f"Coeficiente de Variación: {np.std(datos) / np.mean(datos)}")
+    st.write(f"Percentil 25: {np.percentile(datos, 25)}")
+    st.write(f"Percentil 75: {np.percentile(datos, 75)}")
+    st.write(f"Rango Interquartílico (IQR): {st.iqr(datos)}")
+    st.write(f"Coeficiente de Asimetría: {st.skew(datos)}")
+    st.write(f"Curtosis: {st.kurtosis(datos)}")
+    st.write(f"Entropía: {st.entropy(np.histogram(datos, bins='auto')[0])}")
 
     return fig
 
