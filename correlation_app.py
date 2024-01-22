@@ -38,23 +38,29 @@ def plot_scatter_with_marginal_histograms(x, y):
     
     return fig
 
-def plot_scatter_with_regression_and_histograms(x, y):
-    fig, (scatter_axes, x_hist_axes, y_hist_axes) = plt.subplots(3, 3, figsize=(8, 8), gridspec_kw={'height_ratios': [1, 3, 3], 'width_ratios': [3, 0.2, 0.2]})
+def plot_scatter_with_marginal_histograms(x, y):
+    fig, axs = plt.subplots(1, 2, figsize=(12, 6))
     
-    sns.regplot(x=x, y=y, ax=scatter_axes, scatter_kws={'alpha':0.5})
+    # Scatter plot
+    axs[0].scatter(x, y, alpha=0.5)
+    axs[0].set_xlabel('X')
+    axs[0].set_ylabel('Y')
     
-    x_hist_axes.hist(x, color='black', alpha=0.7)
-    y_hist_axes.hist(y, orientation='horizontal', color='black', alpha=0.7)
+    # Marginal histograms
+    axs[1].hist(x, bins=20, orientation='vertical', color='black', alpha=0.7)
+    axs[1].hist(y, bins=20, orientation='horizontal', color='black', alpha=0.7)
     
-    slope, intercept, r_value, p_value, std_err = linregress(x, y)
-    regression_line = f'Regression Line:\n y = {slope:.2f}x + {intercept:.2f}\n\n'
-    correlation_coefficient = f'Correlation Coefficient: {r_value:.2f}\n\n'
+    # Mean and std lines
+    mean_x, mean_y = np.mean(x), np.mean(y)
+    std_x, std_y = np.std(x), np.std(y)
     
-    scatter_axes.text(0.05, 0.9, regression_line + correlation_coefficient, transform=scatter_axes.transAxes, fontsize=10, verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+    axs[1].axhline(mean_y, color='black', linestyle='-', linewidth=2)
+    axs[1].axhline(mean_y + std_y, color='black', linestyle='--', linewidth=2)
+    axs[1].axhline(mean_y - std_y, color='black', linestyle='--', linewidth=2)
     
-    scatter_axes.tick_params(direction='in', top=True, right=True)
-    x_hist_axes.tick_params(direction='in', labelbottom=False)
-    y_hist_axes.tick_params(direction='in', labelleft=False)
+    axs[1].axvline(mean_x, color='black', linestyle='-', linewidth=2)
+    axs[1].axvline(mean_x + std_x, color='black', linestyle='--', linewidth=2)
+    axs[1].axvline(mean_x - std_x, color='black', linestyle='--', linewidth=2)
     
     return fig
 
