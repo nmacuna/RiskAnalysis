@@ -20,7 +20,7 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
     x, y = np.random.multivariate_normal(mean, cov, size).T
     return x, y, cov
 
-def plot_scatter_with_regression(x, y, cov, figsize=(6, 6)):
+def plot_scatter_with_regression(x, y, cov, figsize=(2, 2)):
     fig, ax = plt.subplots(figsize=figsize)
 
     # Scatter plot
@@ -47,7 +47,7 @@ def plot_scatter_with_regression(x, y, cov, figsize=(6, 6)):
 
     return fig
 
-def plot_scatter_with_regression_and_histograms(x, y, figsize=(4, 4)):
+def plot_scatter_with_regression_and_histograms(x, y, figsize=(2, 2)):
     # Create a DataFrame for Seaborn
     df = pd.DataFrame({'X': x, 'Y': y})
 
