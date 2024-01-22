@@ -27,7 +27,7 @@ def plot_scatter_with_marginal_histograms(x, y):
 
     # Marginal histograms
     sns.histplot(x=x, ax=ax, bins=20, color='blue', kde=False, stat='density', element='step', fill=False)
-    sns.histplot(y=y, bins=20, color='green', kde=False, stat='density', element='step', fill=False)
+    sns.histplot(y=y, ax=ax, bins=20, color='green', kde=False, stat='density', element='step', fill=False, orientation='horizontal')
 
     # Draw mean lines
     ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1)
@@ -45,7 +45,7 @@ def plot_scatter_with_marginal_histograms(x, y):
 
     return fig
 
-def plot_regression(x, y):
+def plot_regression_and_parameters(x, y):
     fig, ax = plt.subplots()
 
     # Scatter plot
@@ -59,6 +59,16 @@ def plot_regression(x, y):
     # Coefficient of determination (r^2)
     r_squared = r_value**2
     ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
+
+    # Covariance and coefficient of correlation
+    cov = np.cov(x, y)[0, 1]
+    correlation_coefficient = np.corrcoef(x, y)[0, 1]
+    cov_text = f'Covarianza: {cov:.2f}\nCoef. de Correlación: {correlation_coefficient:.2f}'
+    ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
+
+    # Equation of the regression line
+    equation_text = f'Regresión: y = {slope:.2f}x + {intercept:.2f}'
+    ax.annotate(equation_text, xy=(0.05, 0.7), xycoords='axes fraction', fontsize=10)
 
     # Labels and legend
     ax.set_xlabel('Variable X')
@@ -90,8 +100,8 @@ def main():
     st.pyplot(fig_marginal_histograms)
 
     # Plot regression line and parameters
-    fig_regression = plot_regression(x_data, y_data)
-    st.pyplot(fig_regression)
+    fig_regression_parameters = plot_regression_and_parameters(x_data, y_data)
+    st.pyplot(fig_regression_parameters)
 
 if __name__ == "__main__":
     main()
