@@ -33,7 +33,8 @@ def fit_distribution(data):
     # Display fit results
     st.write("Fit Results:")
     for distribution, params in results.items():
-        st.write(f"{distribution}: RSS={params['RSS']}, loc={params['loc']}, scale={params['scale']}")
+        if 'RSS' in params:
+            st.write(f"{distribution}: RSS={params['RSS']}, loc={params.get('loc', 'N/A')}, scale={params.get('scale', 'N/A')}")
 
     return results
 
