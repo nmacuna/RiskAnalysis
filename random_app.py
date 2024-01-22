@@ -32,9 +32,9 @@ def fit_distribution(data):
 
     # Display fit results
     st.write("Fit Results:")
-    for distribution, params in results.items():
-        if isinstance(params, dict) and 'RSS' in params:
-            st.write(f"{distribution}: RSS={params['RSS']}, loc={params.get('loc', 'N/A')}, scale={params.get('scale', 'N/A')}")
+    for dist_name, params in results.items():
+        if 'RSS' in params:
+            st.write(f"[distfit] >[{dist_name}] [RSS: {params['RSS']:.7f}] [loc={params.get('loc', 'N/A'):.3f} scale={params.get('scale', 'N/A'):.3f}]")
 
     return results
 
@@ -61,23 +61,30 @@ def main():
 
     # User adjusts parameters if desired
     st.sidebar.header("Adjust Distribution Parameters")
-    if selected_distribution == "Normal":
-        mean = st.sidebar.number_input("Mean", value=fit_results["norm"]["loc"])
-        std_dev = st.sidebar.number_input("Standard Deviation", value=fit_results["norm"]["scale"])
-        params = (mean, std_dev)
-    elif selected_distribution == "Lognormal":
-        mu = st.sidebar.number_input("Mu", value=fit_results["lognorm"]["loc"])
-        sigma = st.sidebar.number_input("Sigma", value=fit_results["lognorm"]["scale"])
-        params = (mu, sigma)
-    elif selected_distribution == "Weibull":
-        shape = st.sidebar.number_input("Shape", value=fit_results["dweibull"]["loc"])
-        params = (shape,)
-    elif selected_distribution == "Exponential":
-        scale = st.sidebar.number_input("Scale", value=fit_results["expon"]["scale"])
-        params = (scale,)
-    elif selected_distribution == "T":
-        df = st.sidebar.number_input("Degrees of Freedom", value=fit_results["t"]["df"])
-        params = (df,)
+    params = None
+
+    selected_distribution_params = fit_results.get(selected_distribution, {})
+
+    if selected_distribution_params:
+        if selected_distribution == "Normal":
+            mean = st.sidebar.number_input("Mean", value=selected_distribution_params.get("loc", 0))
+            std_dev = st.sidebar.number_input("Standard Deviation", value=selected_distribution_params.get("scale", 1))
+            params = (mean, std_dev)
+        elif selected_distribution == "Lognormal":
+            mu = st.sidebar.number_input("Mu", value=selected_distribution_params.get("loc", 0))
+            sigma = st.sidebar.number_input("Sigma", value=selected_distribution_params.get("scale", 1))
+            params = (mu, sigma)
+        elif selected_distribution == "Weibull":
+            shape = st.sidebar.number_input("Shape", value=selected_distribution_params.get("loc", 1))
+            params = (shape,)
+        elif selected_distribution == "Exponential":
+            scale = st.sidebar.number_input("Scale", value=selected_distribution_params.get("scale", 1))
+            params = (scale,)
+        elif selected_distribution == "T":
+            df = st.sidebar.number_input("Degrees of Freedom", value=selected_distribution_params.get("df", 1))
+            params = (df,)
+    else:
+        st.sidebar.warning(f"No fit results available for {selected_distribution}. Using default parameters.")
 
     # Generate data with user-selected distribution and adjusted parameters
     generated_data = generate_data(selected_distribution, data_size, params)
