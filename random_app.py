@@ -39,7 +39,7 @@ def plot_histogram_and_curve(data, bins, fitted_data, title):
     st.pyplot(fig)
 
 def fit_distribution(data, distribution):
-    params = getattr(stats, distribution).fit(data)
+    params = stats.fit(data, distribution)
     fitted_data = getattr(stats, distribution)(*params).pdf(data)
 
     plot_histogram_and_curve(data, 20, fitted_data, 'Histogram and Fitted Distribution')
