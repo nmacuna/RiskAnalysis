@@ -13,30 +13,29 @@ import seaborn as sns
 from io import BytesIO
 from scipy.stats import linregress
 
-def plot_scatter_with_marginal_histograms(x, y):
-    fig, (ax_scatter, ax_histx, ax_histy) = plt.subplots(3, 3, figsize=(8, 8), gridspec_kw={'height_ratios': [1, 3, 3], 'width_ratios': [3, 0.2, 0.2]})
-    
-    ax_scatter.scatter(x, y, alpha=0.5)
-    
-    ax_histx.hist(x, bins=20, color='black', alpha=0.7)
-    ax_histy.hist(y, bins=20, orientation='horizontal', color='black', alpha=0.7)
-    
-    mean_x, mean_y = np.mean(x), np.mean(y)
-    std_x, std_y = np.std(x), np.std(y)
-    
-    ax_histx.axvline(mean_x, color='black', linestyle='-', linewidth=2)
-    ax_histy.axhline(mean_y, color='black', linestyle='-', linewidth=2)
-    
-    ax_histx.axvline(mean_x + std_x, color='black', linestyle='--', linewidth=2)
-    ax_histx.axvline(mean_x - std_x, color='black', linestyle='--', linewidth=2)
-    
-    ax_histy.axhline(mean_y + std_y, color='black', linestyle='--', linewidth=2)
-    ax_histy.axhline(mean_y - std_y, color='black', linestyle='--', linewidth=2)
-    
-    ax_histx.tick_params(axis="x", labelbottom=False)
-    ax_histy.tick_params(axis="y", labelleft=False)
-    
-    return fig
+def fig2data(fig):
+    """
+    Convert a Matplotlib figure to a 4D numpy array with RGBA channels and return it.
+    """
+    # Draw the figure on the renderer
+    fig.canvas.draw()
+
+    # Get the RGBA buffer from the figure
+    w, h = fig.canvas.get_width_height()
+    buf = np.frombuffer(fig.canvas.tostring_argb(), dtype=np.uint8)
+    buf.shape = (w, h, 4)
+
+    # Roll the buffer and flip it to get it in the correct orientation
+    buf = np.roll(buf, 3, axis=2)
+    buf = np.flipud(buf)
+
+    return buf
+
+import streamlit as st
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from PIL import Image
 
 def plot_scatter_with_marginal_histograms(x, y):
     # Create figure and gridspec
@@ -93,11 +92,12 @@ def main():
 
     # First Figure: Scatter plot with histograms and mean/std lines
     fig_marginal_histograms = plot_scatter_with_marginal_histograms(x_data, y_data)
-    st.pyplot(fig_marginal_histograms, caption='Scatter Plot with Histograms and Mean/Std Lines', use_container_width=True)
+    
+    # Convert the figure to an image
+    image_marginal_histograms = Image.fromarray(fig2data(fig_marginal_histograms))
 
-    # Second Figure: Scatter plot with regression line and histograms
-    fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
-    st.pyplot(fig_seaborn, caption='Scatter Plot with Regression Line and Histograms', use_container_width=True)
+    # Display the image
+    st.image(image_marginal_histograms, caption='Scatter Plot with Histograms and Mean/Std Lines', use_column_width=True)
 
 if __name__ == "__main__":
     main()
