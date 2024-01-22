@@ -28,7 +28,7 @@ def plot_probability_distribution(distribution_type, params, title):
     fig, (ax_pdf, ax_cdf) = plt.subplots(1, 2, figsize=(12, 4))
 
     # Plot PDF
-    x_pdf = np.linspace(0, 5, 100)
+    x_pdf = np.linspace(0, 5, 100) if distribution_type == "Exponencial" else np.linspace(0, 10, 100)
     if distribution_type == "Exponencial":
         y_pdf = exponential_custom_pdf(x_pdf, *params)
     elif distribution_type == "Normal":
@@ -37,12 +37,12 @@ def plot_probability_distribution(distribution_type, params, title):
         y_pdf = lognormal_custom_pdf(x_pdf, *params)
     ax_pdf.plot(x_pdf, y_pdf, 'r-', lw=2, alpha=0.6, label='PDF')
     ax_pdf.set_title('Función de Densidad de Probabilidad (PDF)')
-    ax_pdf.set_xlabel('Eje X')
-    ax_pdf.set_ylabel('Densidad de Probabilidad')
+    ax_pdf.set_xlabel('Valores de la variable')
+    ax_pdf.set_ylabel('PDF')
     ax_pdf.legend()
 
     # Plot CDF
-    x_cdf = np.linspace(0, 5, 100)
+    x_cdf = np.linspace(0, 5, 100) if distribution_type == "Exponencial" else np.linspace(0, 10, 100)
     if distribution_type == "Exponencial":
         y_cdf = stats.expon.cdf(x_cdf, scale=1/params[0])
     elif distribution_type == "Normal":
@@ -50,16 +50,15 @@ def plot_probability_distribution(distribution_type, params, title):
     else:  # Lognormal
         y_cdf = stats.lognorm.cdf(x_cdf, params[1], 0, np.exp(params[0]))
     ax_cdf.plot(x_cdf, y_cdf, 'b-', lw=2, alpha=0.6, label='CDF')
-    ax_cdf.set_title('Función de Distribución Acumulativa (CDF)')
-    ax_cdf.set_xlabel('Eje X')
-    ax_cdf.set_ylabel('Probabilidad Acumulativa')
+    ax_cdf.set_title('Función de Densidad de Probabilidad Acumulada (CDF)')
+    ax_cdf.set_xlabel('Valores de la variable')
+    ax_cdf.set_ylabel('CDF')
     ax_cdf.legend()
 
     fig.suptitle(title)
     return fig
 
 def main():
-
     # Banner image
     banner_image = Image.open("Confiabilidad_imagen.jpeg")  # Reemplaza con la ruta real de tu imagen
     st.image(banner_image, use_column_width=True)
