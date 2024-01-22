@@ -51,9 +51,9 @@ def plot_scatter_with_regression(x, y, cov, figsize=(6, 6)):
 
 def plot_scatter_with_regression_and_histograms(x, y):
     sns.set(style="whitegrid")
-    
-    # Create a joint plot with regression line and marginal histograms
-    g = sns.jointplot(x=x, y=y, kind="reg", height=6)
+
+    # Create a joint plot without the regression line but with marginal histograms
+    g = sns.jointplot(x=x, y=y, kind="scatter", height=6)
 
     # Plot mean and standard deviation lines
     mean_x, mean_y = np.mean(x), np.mean(y)
@@ -71,13 +71,8 @@ def plot_scatter_with_regression_and_histograms(x, y):
     # Display legend
     g.ax_joint.legend()
 
-    # Save the joint plot to a BytesIO buffer
-    buffer = BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-
-    # Display the joint plot using st.image()
-    st.image(buffer, caption='Scatter Plot with Regression', use_column_width=True, format='png')
+    # Display the joint plot using st.pyplot()
+    st.pyplot(g)
 
 
 def main():
