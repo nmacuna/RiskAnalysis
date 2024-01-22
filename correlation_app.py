@@ -16,7 +16,7 @@ from scipy.stats import linregress
 def plot_scatter_with_marginal_histograms(x, y):
     fig, (ax_scatter, ax_histx, ax_histy) = plt.subplots(3, 3, figsize=(8, 8), gridspec_kw={'height_ratios': [1, 3, 3], 'width_ratios': [3, 0.2, 0.2]})
     
-    sns.scatterplot(x=x, y=y, ax=ax_scatter)
+    ax_scatter.scatter(x, y, alpha=0.5)
     
     ax_histx.hist(x, bins=20, color='black', alpha=0.7)
     ax_histy.hist(y, bins=20, orientation='horizontal', color='black', alpha=0.7)
