@@ -9,7 +9,6 @@ import streamlit as st
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from PIL import Image
 from scipy.stats import linregress
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
@@ -19,70 +18,30 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
     x, y = np.random.multivariate_normal(mean, cov, size).T
     return x, y, cov
 
-def plot_scatter_with_marginal_histograms(x, y):
-    fig, ax = plt.subplots()
+def plot_scatter_with_regression_and_histograms(x, y):
+    # Create a DataFrame for Seaborn
+    df = pd.DataFrame({'X': x, 'Y': y})
 
-    # Scatter plot
-    sns.scatterplot(x=x, y=y, ax=ax, alpha=0.5)
+    # Create a jointplot with regression line
+    sns.set(style="white", color_codes=True)
+    g = sns.jointplot(x="X", y="Y", kind="reg", data=df)
 
-    # Marginal histograms
-    sns.histplot(x=x, ax=ax, bins=20, color='blue', kde=False, stat='density', element='step', fill=False)
-    
-    # Horizontal histogram
-    ax_histy = plt.axes([0.1, 0.1, 0.65, 0.2], sharex=ax)
-    ax_histy.tick_params(direction='in', labelleft=False)
-    ax_histy.hist(y, bins=20, color='green', orientation='horizontal', density=True, histtype='step', linewidth=1)
-    
-    # Draw mean lines
+    # Access the axes and plot mean and standard deviation lines
+    ax = g.ax_joint
     ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1)
     ax.axhline(np.mean(y), color='black', linestyle='-', linewidth=1)
-
-    # Draw standard deviation lines
     ax.axvline(np.mean(x) + np.std(x), color='black', linestyle='--', linewidth=1)
     ax.axvline(np.mean(x) - np.std(x), color='black', linestyle='--', linewidth=1)
     ax.axhline(np.mean(y) + np.std(y), color='black', linestyle='--', linewidth=1)
     ax.axhline(np.mean(y) - np.std(y), color='black', linestyle='--', linewidth=1)
 
-    # Labels
-    ax.set_xlabel('Variable X')
-    ax.set_ylabel('Variable Y')
+    # Save the plot
+    plt.savefig("marginal_plot_with_regression_line_Seaborn.png", figsize=(4, 4), dpi=150)
 
-    return fig
-
-def plot_regression_and_parameters(x, y):
-    fig, ax = plt.subplots()
-
-    # Scatter plot
-    sns.scatterplot(x=x, y=y, ax=ax, alpha=0.5)
-
-    # Linear regression
-    slope, intercept, r_value, p_value, std_err = linregress(x, y)
-    line = slope * x + intercept
-    ax.plot(x, line, color='red', label=f'Regresión lineal: y = {slope:.2f}x + {intercept:.2f}')
-
-    # Coefficient of determination (r^2)
-    r_squared = r_value**2
-    ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
-
-    # Covariance and coefficient of correlation
-    cov = np.cov(x, y)[0, 1]
-    correlation_coefficient = np.corrcoef(x, y)[0, 1]
-    cov_text = f'Covarianza: {cov:.2f}\nCoef. de Correlación: {correlation_coefficient:.2f}'
-    ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
-
-    # Equation of the regression line
-    equation_text = f'Regresión: y = {slope:.2f}x + {intercept:.2f}'
-    ax.annotate(equation_text, xy=(0.05, 0.7), xycoords='axes fraction', fontsize=10)
-
-    # Labels and legend
-    ax.set_xlabel('Variable X')
-    ax.set_ylabel('Variable Y')
-    ax.legend()
-
-    return fig
+    return g
 
 def main():
-    st.title("Scatter Plot with Marginal Histograms and Regression Analysis")
+    st.title("Scatter Plot with Marginal Histograms and Regression Line (Seaborn)")
 
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
@@ -95,13 +54,11 @@ def main():
     data_size = 100
     x_data, y_data, _ = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot scatter plot with marginal histograms
-    fig_scatter_histograms = plot_scatter_with_marginal_histograms(x_data, y_data)
-    st.pyplot(fig_scatter_histograms)
+    # Plot scatter plot with regression line and histograms using Seaborn
+    fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
 
-    # Plot regression line and parameters
-    fig_regression_parameters = plot_regression_and_parameters(x_data, y_data)
-    st.pyplot(fig_regression_parameters)
+    # Display the plot using Streamlit
+    st.pyplot(fig_seaborn)
 
 if __name__ == "__main__":
     main()
