@@ -34,19 +34,21 @@ def fit_distribution(data):
     # Display fit results
     st.write("Fit Results:")
     for dist_name, dist_params in results.items():
-        if 'RSS' in dist_params:
-            st.write(f"[distfit] >[{dist_name}] [RSS: {dist_params['RSS']:.7f}] [loc={dist_params.get('loc', 'N/A'):.3f} scale={dist_params.get('scale', 'N/A'):.3f}]")
+        rss_value = dist_params.get('RSS', 'N/A')
+        loc_value = dist_params.get('loc', 'N/A')
+        scale_value = dist_params.get('scale', 'N/A')
+        st.write(f"[distfit] >[{dist_name}] [RSS: {rss_value:.7f}] [loc={loc_value:.3f} scale={scale_value:.3f}]")
 
     return results
 
 # Function to plot the generated data
 def plot_generated_data(data):
-    plt.figure(figsize=(8, 6))
-    plt.hist(data, bins=30, density=True, alpha=0.7, color='blue', edgecolor='black')
-    plt.title('Generated Random Data')
-    plt.xlabel('Value')
-    plt.ylabel('Frequency')
-    st.pyplot()
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.hist(data, bins=30, density=True, alpha=0.7, color='blue', edgecolor='black')
+    ax.set_title('Generated Random Data')
+    ax.set_xlabel('Value')
+    ax.set_ylabel('Frequency')
+    st.pyplot(fig)
 
 def main():
     st.title("Random Number Generator and Distribution Fitting")
