@@ -45,9 +45,27 @@ def ajustar_distribucion(datos, tipo_distribucion):
     plt.hist(datos, bins=30, color='blue', alpha=0.7, label='Datos Generados')
     plt.legend()
 
-    # Ploteo de la distribución ajustada utilizando distfit.plot()
-    dfit.plot()
+    # Ploteo de la distribución ajustada
+    x = np.linspace(min(datos), max(datos), 100)
+
+    # Utilizar dfit.model para obtener loc y scale
+    loc = dfit.model['loc']
+    scale = dfit.model['scale']
+
+    if tipo_distribucion == 'norm':
+        y = norm.pdf(x, loc=loc, scale=scale)
+    elif tipo_distribucion == 'lognorm':
+        y = lognorm.pdf(x, s=dfit.model['arg'][0], loc=loc, scale=scale)
+    elif tipo_distribucion == 'weibull':
+        y = weibull_min.pdf(x, c=dfit.model['arg'][0], loc=loc, scale=scale)
+    elif tipo_distribucion == 'gamma':
+        y = gamma.pdf(x, a=dfit.model['arg'][0], loc=loc, scale=scale)
+    elif tipo_distribucion == 'uniform':
+        y = uniform.pdf(x, loc=loc, scale=scale)
     
+    plt.plot(x, y, 'r-', label=f'Distribución {tipo_distribucion} ajustada')
+    plt.legend()
+
     return fig
 
 def main():
@@ -62,7 +80,7 @@ def main():
     st.write(st.session_state.datos_generados)
 
     # Seleccionar tipo de distribución para ajuste
-    tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
+    tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'weibull', 'gamma', 'uniform'])
 
     # Ajustar distribución y mostrar la figura con el histograma y la distribución ajustada
     fig = ajustar_distribucion(st.session_state.datos_generados, tipo_distribucion)
