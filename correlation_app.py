@@ -7,6 +7,7 @@ Created on Sun Jan 21 15:43:45 2024
 
 import streamlit as st
 import numpy as np
+import seaborn as sns
 import matplotlib.pyplot as plt
 from PIL import Image
 from scipy.stats import linregress
@@ -18,12 +19,15 @@ def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_d
     x, y = np.random.multivariate_normal(mean, cov, size).T
     return x, y, cov
 
-def plot_scatter_with_stats(x, y, cov):
-    fig, (ax, ax_histx, ax_histy) = plt.subplots(1, 3, figsize=(12, 4), gridspec_kw={'width_ratios': [4, 1, 1]})
+def plot_scatter_with_marginal_histograms(x, y):
+    fig, ax = plt.subplots()
 
     # Scatter plot
-    ax.scatter(x, y, alpha=0.5)
-    ax.set_title('Generación de datos')
+    sns.scatterplot(x=x, y=y, ax=ax, alpha=0.5)
+
+    # Marginal histograms
+    sns.histplot(x=x, ax=ax, bins=20, color='blue', kde=False, stat='density', element='step', fill=False)
+    sns.histplot(y=y, ax=ax, bins=20, color='green', kde=False, stat='density', element='step', fill=False, orientation='horizontal')
 
     # Draw mean lines
     ax.axvline(np.mean(x), color='black', linestyle='-', linewidth=1)
@@ -39,22 +43,13 @@ def plot_scatter_with_stats(x, y, cov):
     ax.set_xlabel('Variable X')
     ax.set_ylabel('Variable Y')
 
-    # Draw histograms
-    ax_histx.hist(x, bins=20, color='blue', alpha=0.7, orientation='vertical')
-    ax_histy.hist(y, bins=20, color='green', alpha=0.7, orientation='horizontal')
-
-    # Remove x and y axis labels from histograms
-    ax_histx.set_yticklabels([])
-    ax_histy.set_xticklabels([])
-
     return fig
 
 def plot_regression(x, y):
     fig, ax = plt.subplots()
 
     # Scatter plot
-    ax.scatter(x, y, alpha=0.5)
-    ax.set_title('Generación de datos')
+    sns.scatterplot(x=x, y=y, ax=ax, alpha=0.5)
 
     # Linear regression
     slope, intercept, r_value, p_value, std_err = linregress(x, y)
@@ -90,9 +85,9 @@ def main():
     data_size = 100
     x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot scatter plot with statistics
-    fig_stats = plot_scatter_with_stats(x_data, y_data, covariance_matrix)
-    st.pyplot(fig_stats)
+    # Plot scatter plot with marginal histograms
+    fig_marginal_histograms = plot_scatter_with_marginal_histograms(x_data, y_data)
+    st.pyplot(fig_marginal_histograms)
 
     # Plot regression line and parameters
     fig_regression = plot_regression(x_data, y_data)
