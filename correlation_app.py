@@ -49,26 +49,30 @@ def plot_scatter_with_regression(x, y, cov, figsize=(6, 6)):
 
     return fig
 
-def plot_scatter_with_regression_and_histograms(x, y, figsize=(4, 4)):
-    # Create a DataFrame for Seaborn
-    df = pd.DataFrame({'X': x, 'Y': y})
-
-    # Create a jointplot without the regression line
-    sns.set(style="white", color_codes=True)
-    g = sns.jointplot(x="X", y="Y", data=df, kind="scatter", marginal_kws=dict(bins=20, fill=False), height=figsize[1])
-
-    # Access the axes and plot mean and standard deviation lines
+def plot_scatter_with_regression_and_histograms(x, y):
+    sns.set(style="whitegrid")
+    
+    # Create a joint plot with regression line and marginal histograms
+    g = sns.jointplot(x=x, y=y, kind="reg", height=6)
+    
+    # Extract the axes from the joint plot
     ax = g.ax_joint
-    ax.axvline(np.mean(x), color='#000000', linestyle='-', linewidth=1)  # Black color
-    ax.axhline(np.mean(y), color='#000000', linestyle='-', linewidth=1)
-    ax.axvline(np.mean(x) + np.std(x), color='#000000', linestyle='--', linewidth=1)
-    ax.axvline(np.mean(x) - np.std(x), color='#000000', linestyle='--', linewidth=1)
-    ax.axhline(np.mean(y) + np.std(y), color='#000000', linestyle='--', linewidth=1)
-    ax.axhline(np.mean(y) - np.std(y), color='#000000', linestyle='--', linewidth=1)
 
-    # Save the plot with correct size
-    plt.figure(figsize=figsize)
-    plt.savefig("marginal_plot_with_regression_line_Seaborn.png", dpi=150)
+    # Plot mean and standard deviation lines
+    mean_x, mean_y = np.mean(x), np.mean(y)
+    std_x, std_y = np.std(x), np.std(y)
+
+    ax.axvline(mean_x, color='black', linestyle='--', linewidth=2, label=f'Mean X: {mean_x:.2f}')
+    ax.axhline(mean_y, color='black', linestyle='--', linewidth=2, label=f'Mean Y: {mean_y:.2f}')
+
+    ax.axvline(mean_x + std_x, color='blue', linestyle='--', linewidth=2, label=f'Mean X + 1 Std Dev')
+    ax.axhline(mean_y + std_y, color='blue', linestyle='--', linewidth=2, label=f'Mean Y + 1 Std Dev')
+
+    ax.axvline(mean_x - std_x, color='red', linestyle='--', linewidth=2, label=f'Mean X - 1 Std Dev')
+    ax.axhline(mean_y - std_y, color='red', linestyle='--', linewidth=2, label=f'Mean Y - 1 Std Dev')
+
+    # Display legend
+    ax.legend()
 
     return g
 
