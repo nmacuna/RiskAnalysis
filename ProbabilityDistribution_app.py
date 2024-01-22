@@ -12,8 +12,8 @@ import scipy.stats as stats
 from PIL import Image
 import math
 
-def exponential_custom_pdf(x, scale):
-    return stats.expon.pdf(x, scale=scale)
+def exponential_custom_pdf(x, rate):
+    return stats.expon.pdf(x, scale=1/rate)
 
 def normal_custom_pdf(x, mean, std_dev):
     return stats.norm.pdf(x, loc=mean, scale=std_dev)
@@ -37,22 +37,22 @@ def plot_probability_distribution(distribution_type, params, title):
         y_pdf = lognormal_custom_pdf(x_pdf, *params)
     ax_pdf.plot(x_pdf, y_pdf, 'r-', lw=2, alpha=0.6, label='PDF')
     ax_pdf.set_title('Función de Densidad de Probabilidad (PDF)')
-    ax_pdf.set_xlabel('Valores de la variable')
-    ax_pdf.set_ylabel('PDF')
+    ax_pdf.set_xlabel('Eje X')
+    ax_pdf.set_ylabel('Densidad de Probabilidad')
     ax_pdf.legend()
 
     # Plot CDF
     x_cdf = np.linspace(0, 5, 100)
     if distribution_type == "Exponencial":
-        y_cdf = stats.expon.cdf(x_cdf, scale=params[0])
+        y_cdf = stats.expon.cdf(x_cdf, scale=1/params[0])
     elif distribution_type == "Normal":
         y_cdf = stats.norm.cdf(x_cdf, loc=params[0], scale=params[1])
     else:  # Lognormal
         y_cdf = stats.lognorm.cdf(x_cdf, params[1], 0, np.exp(params[0]))
     ax_cdf.plot(x_cdf, y_cdf, 'b-', lw=2, alpha=0.6, label='CDF')
-    ax_cdf.set_title('Función de Densidad de Probabilidad Acumulada (CDF)')
-    ax_cdf.set_xlabel('Valores de la variable')
-    ax_cdf.set_ylabel('CDF')
+    ax_cdf.set_title('Función de Distribución Acumulativa (CDF)')
+    ax_cdf.set_xlabel('Eje X')
+    ax_cdf.set_ylabel('Probabilidad Acumulativa')
     ax_cdf.legend()
 
     fig.suptitle(title)
@@ -64,15 +64,15 @@ def main():
     banner_image = Image.open("Confiabilidad_imagen.jpeg")  # Reemplaza con la ruta real de tu imagen
     st.image(banner_image, use_column_width=True)
 
-    st.title("Confiabilidad y Análisis de Riesgo  Explorador de Distribuciones de Probabilidad")
+    st.title("Confiabilidad y análisis de riesgo  Visualizador de distribuciones de probabilidad")
 
     # Barra lateral para la entrada del usuario
     distribution_type = st.sidebar.selectbox("Seleccionar Distribución", ["Exponencial", "Lognormal", "Normal"])
     
     if distribution_type == "Exponencial":
         st.sidebar.header("Parámetros de Distribución Exponencial")
-        scale = st.sidebar.slider("Escala (λ)", 0.1, 10.0, 1.0, step=0.1)
-        params = (scale,)
+        rate = st.sidebar.slider("Tasa (λ)", 0.1, 10.0, 1.0, step=0.1)
+        params = (rate,)
     elif distribution_type == "Lognormal":
         st.sidebar.header("Parámetros de Distribución Lognormal")
         mean = st.sidebar.slider("Media", 0.1, 10.0, 1.0, step=0.1)
