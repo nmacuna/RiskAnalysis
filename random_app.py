@@ -52,8 +52,9 @@ def plot_histogram_and_curve(data, bins, fitted_data, title):
 def fit_distribution(data, distribution, params):
     try:
         # Use curve_fit for non-linear optimization
-        popt, pcov = curve_fit(getattr(stats, distribution).pdf, data, p0=params)
-        fitted_data = getattr(stats, distribution)(*popt).pdf(data)
+        x_values = np.linspace(min(data), max(data), len(data))
+        popt, pcov = curve_fit(getattr(stats, distribution).pdf, x_values, data, p0=params)
+        fitted_data = getattr(stats, distribution)(*popt).pdf(x_values)
         plot_histogram_and_curve(data, 20, fitted_data, 'Histogram and Fitted Distribution')
     except Exception as e:
         st.warning(f"Failed to fit distribution: {e}")
@@ -64,13 +65,13 @@ def main():
 
     st.title("Random Number Generator and Distribution Fitting")
 
-     # Generate new data button
-    if st.sidebar.button("Generate New Data"):
-        st.session_state.generated_data = generate_random_data(data_size)
-
     # Sidebar for user input
     data_size = st.sidebar.slider("Data Size", 100, 10000, 1000, step=100)
     fit_distribution_type = st.sidebar.selectbox("Select Distribution for Fitting", ["norm", "lognorm", "weibull_min", "expon"])
+
+    # Generate new data button
+    if st.sidebar.button("Generate New Data"):
+        st.session_state.generated_data = generate_random_data(data_size)
 
     # Display generated data
     st.header("Generated Random Data")
