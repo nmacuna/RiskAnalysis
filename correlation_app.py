@@ -88,13 +88,14 @@ def main():
     data_size = 100
     x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-    # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
-    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
-    st.pyplot(fig_scatter)
 
     # Plot scatter plot with marginal histograms
     fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
     st.pyplot(fig_seaborn)
+
+    # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
+    fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
+    st.pyplot(fig_scatter)
 
 if __name__ == "__main__":
     main()
