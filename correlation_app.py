@@ -71,19 +71,19 @@ def plot_scatter_with_regression_and_histograms(x, y):
 
     return g
 
-def display_app1():
-    st.title("Correlation")
+def display_app():
+    # Show the banner, app name
+    banner_image = Image.open("Confiabilidad_imagen.jpeg")
+    st.image(banner_image, use_column_width=True)
 
-    # Add button to return to the main menu
-    if st.button("Back to Menu"):
-        st.empty()
+    st.title("Correlation app")
 
     # Sidebar for user input
-    correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
-    mean_x = st.sidebar.slider("Media variable X", -10.0, 10.0, 0.0, step=0.1)
-    std_dev_x = st.sidebar.slider("Desviación estándar variable X", 0.1, 10.0, 1.0, step=0.1)
-    mean_y = st.sidebar.slider("Media variable Y", -10.0, 10.0, 0.0, step=0.1)
-    std_dev_y = st.sidebar.slider("Desviación estándar variable Y", 0.1, 10.0, 1.0, step=0.1)
+    correlation_value = st.slider("Correlation XY", -1.0, 1.0, 0.0, step=0.1)
+    mean_x = st.slider("Mean variable X", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_x = st.slider("Standard Deviation variable X", 0.1, 10.0, 1.0, step=0.1)
+    mean_y = st.slider("Mean variable Y", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_y = st.slider("Standard Deviation variable Y", 0.1, 10.0, 1.0, step=0.1)
 
     # Generate data with correlation, mean, and standard deviation
     data_size = 100
