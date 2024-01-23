@@ -76,7 +76,9 @@ def display_app():
     banner_image = Image.open("Confiabilidad_imagen.jpeg")
     st.image(banner_image, use_column_width=True)
 
-    st.title("Correlation")
+    st.title("Reliability and Risk Analysis - Visual Resources")
+
+    st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
 
     # Sidebar for user input
     correlation_value = st.slider("Correlation XY", -1.0, 1.0, 0.0, step=0.1)
@@ -95,7 +97,6 @@ def display_app():
 
     # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
     fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
-    st.pyplot(fig_scatter)ith_regression(x_data, y_data, covariance_matrix)
     st.pyplot(fig_scatter)
 
     st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
