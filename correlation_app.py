@@ -6,6 +6,7 @@ Created on Sun Jan 21 15:43:45 2024
 """
 
 # app1.py
+# app1.py
 import streamlit as st
 from PIL import Image
 from scipy.stats import linregress
@@ -72,9 +73,8 @@ def plot_scatter_with_regression_and_histograms(x, y):
     return g
 
 def app1():
-    # Banner image
-    banner_image = Image.open("Confiabilidad_imagen.jpeg")
-    st.image(banner_image, use_column_width=True)
+    # Hide the banner and navigation menu
+    st.markdown("<style>div.css-1l02zno{visibility:hidden;}</style>", unsafe_allow_html=True)
 
     st.title("Confiabilidad y análisis de riesgo  Visualizador de correlación")
 
