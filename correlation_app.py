@@ -5,13 +5,14 @@ Created on Sun Jan 21 15:43:45 2024
 @author: nm.acuna
 """
 
+# app1.py
 import streamlit as st
+from PIL import Image
+from scipy.stats import linregress
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from PIL import Image
-from scipy.stats import linregress
-import pandas as pd  # Add this import for DataFrame
+import pandas as pd
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
     cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
@@ -37,7 +38,7 @@ def plot_scatter_with_regression(x, y, cov):
     ax.annotate(f'$R^2 = {r_squared:.2f}$', xy=(0.05, 0.9), xycoords='axes fraction', fontsize=10)
 
     # Covarianza y coeficiente de correlación
-    cov_text = f'Covarianza: {cov[0, 1]:.2f}\nCoef. de Correlación: {np.corrcoef(x, y)[0, 1]:.2f}'
+    cov_text = f'Covarianza: {cov[0, 1]:.2f}\nCoef. de Correlación : {np.corrcoef(x, y)[0, 1]:.2f}'
     ax.annotate(cov_text, xy=(0.05, 0.8), xycoords='axes fraction', fontsize=10)
 
     # Etiquetas y leyenda
@@ -70,7 +71,7 @@ def plot_scatter_with_regression_and_histograms(x, y):
 
     return g
 
-def main():
+def app1():
     # Banner image
     banner_image = Image.open("Confiabilidad_imagen.jpeg")
     st.image(banner_image, use_column_width=True)
@@ -88,7 +89,6 @@ def main():
     data_size = 100
     x_data, y_data, covariance_matrix = generate_correlated_data(data_size, correlation_value, mean_x, std_dev_x, mean_y, std_dev_y)
 
-
     # Plot scatter plot with marginal histograms
     fig_seaborn = plot_scatter_with_regression_and_histograms(x_data, y_data)
     st.pyplot(fig_seaborn)
@@ -96,6 +96,3 @@ def main():
     # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
     fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
     st.pyplot(fig_scatter)
-
-if __name__ == "__main__":
-    main()
