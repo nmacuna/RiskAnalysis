@@ -23,14 +23,25 @@ def main():
     # Get the current page name from the URL
     page = st.experimental_get_query_params().get("page", [""])[0]
 
-    # Display selected app content based on the page parameter
-    if page == "correlation":
-        correlation_app.display_app()
-    elif page == "distribution":
-        distribution_app.display_app()
-    elif page == "random":
-        random_app.display_app()
+    # If no page is specified, show the selection menu
+    if not page:
+        selected_app = st.sidebar.radio("Select App", ["Correlation", "Probability Distribution", "Random"])
+
+        # Display selected app content
+        if selected_app == "Correlation":
+            correlation_app.display_app()
+        elif selected_app == "Probability Distribution":
+            distribution_app.display_app()
+        elif selected_app == "Random":
+            random_app.display_app()
+    else:
+        # Display selected app content based on the page parameter
+        if page == "correlation":
+            correlation_app.display_app()
+        elif page == "distribution":
+            distribution_app.display_app()
+        elif page == "random":
+            random_app.display_app()
 
 if __name__ == "__main__":
     main()
-
