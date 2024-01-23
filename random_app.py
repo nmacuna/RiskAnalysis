@@ -88,7 +88,7 @@ def ajustar_distribucion(datos, tipo_distribucion):
 
     return fig
 
-def main():
+def display_app3():
 
     # Banner image
     banner_image = Image.open("Confiabilidad_imagen.jpeg")
@@ -113,6 +113,3 @@ def main():
 
     # Mostrar la figura en Streamlit
     st.pyplot(fig)
-
-if __name__ == "__main__":
-    main()
