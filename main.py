@@ -6,7 +6,7 @@ Created on Sun Jan 21 15:43:45 2024
 """
 # main.py
 import streamlit as st
-from app1 import app1
+from correlation_app import app1
 # Import other app modules if needed
 
 # Function to display the menu
