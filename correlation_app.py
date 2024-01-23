@@ -72,13 +72,14 @@ def plot_scatter_with_regression_and_histograms(x, y):
     return g
 
 def display_app1():
-    # Show the banner, app name, and navigation menu
-    banner_image = Image.open("Confiabilidad_imagen.jpeg")
-    st.image(banner_image, use_column_width=True)
-
-    st.title("Reliability and Risk Analysis - Visual Resources")
+    # app name
+    st.title("Correlation explorer between two variables")
 
     st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
+
+    # Add button to return to the main menu
+    if st.button("Back to Menu"):
+        st.experimental_rerun()
 
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
@@ -98,7 +99,3 @@ def display_app1():
     # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
     fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
     st.pyplot(fig_scatter)
-
-    # Add button to return to the main menu
-    if st.button("Back to Menu"):
-        st.experimental_rerun()
