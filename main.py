@@ -12,7 +12,7 @@ import ProbabilityDistribution_app as app2
 import random_app as app3
 
 def main():
-    # Show the banner, app name
+    # Show the banner, app title
     banner_image = Image.open("Confiabilidad_imagen.jpeg")
     st.image(banner_image, use_column_width=True)
 
@@ -21,7 +21,7 @@ def main():
     st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
 
     # Navigation menu
-    selected_app = st.radio("Select App", ["Home", "Correlation", "Probability Distribution", "Random"])
+    selected_app = st.sidebar.radio("Select App", ["Home", "Correlation", "Probability Distribution", "Random"])
 
     # Display selected app content
     if selected_app == "Home":
