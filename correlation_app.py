@@ -72,7 +72,6 @@ def plot_scatter_with_regression_and_histograms(x, y):
     return g
 
 def display_app1():
-    st.title("Correlation explorer between two variables")
 
     # Add button to return to the main menu
     if st.button("Back to Menu"):
