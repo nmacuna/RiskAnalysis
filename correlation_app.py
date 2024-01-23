@@ -53,7 +53,7 @@ def plot_scatter_with_regression_and_histograms(x, y):
 
     # Create a jointplot without the regression line
     sns.set(style="white", color_codes=True)
-    g = sns.jointplot(x="X", y="Y", data=df, kind="scatter", marginal_kws=dict(bins=20, fill=False))
+    g = sns.jointplot(x="Variable X", y="variable Y", data=df, kind="scatter", marginal_kws=dict(bins=20, fill=False))
 
     # Access the axes and plot mean and standard deviation lines
     ax = g.ax_joint
