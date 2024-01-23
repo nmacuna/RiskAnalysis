@@ -27,11 +27,11 @@ def main():
     if selected_app == "Home":
         display_home()
     elif selected_app == "Correlation":
-        correlation_app.display_app()
+        app1.display_app()
     elif selected_app == "Probability Distribution":
-        distribution_app.display_app()
+        app2.display_app()
     elif selected_app == "Random":
-        random_app.display_app()
+        app3.display_app()
 
 def display_home():
     st.write("Welcome to the main app!")
