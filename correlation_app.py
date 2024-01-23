@@ -72,10 +72,11 @@ def plot_scatter_with_regression_and_histograms(x, y):
     return g
 
 def display_app1():
+    st.title("Correlation")
 
     # Add button to return to the main menu
     if st.button("Back to Menu"):
-        st.markdown("_Go back to the main menu._")
+        st.empty()
 
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
