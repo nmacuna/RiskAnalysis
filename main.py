@@ -20,21 +20,19 @@ def main():
 
     st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
 
-    # Navigation menu
-    selected_app = st.sidebar.radio("Select App", ["Home", "Correlation", "Probability Distribution", "Random"])
+    # Get the current page name from the URL
+    page = st.experimental_get_query_params().get("page", [""])[0]
 
-    # Display selected app content
-    if selected_app == "Home":
-        display_home()
-    elif selected_app == "Correlation":
+    # Display selected app content based on the page parameter
+    if page == "correlation":
         correlation_app.display_app()
-    elif selected_app == "Probability Distribution":
+    elif page == "distribution":
         distribution_app.display_app()
-    elif selected_app == "Random":
+    elif page == "random":
         random_app.display_app()
 
-def display_home():
-    st.write("Welcome to the main app!")
+if __name__ == "__main__":
+    main()
 
 if __name__ == "__main__":
     main()
