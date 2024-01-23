@@ -10,6 +10,12 @@ import streamlit as st
 from correlation_app import app1
 # Import other app modules if needed
 
+# Function to display the banner and menu by default
+def display_banner_and_menu():
+    banner_image = st.image("Confiabilidad_imagen.jpeg", use_column_width=True)
+    st.title("Your App Name")  # Change the app name accordingly
+    return banner_image
+
 # Function to display the menu
 def display_menu():
     st.sidebar.title('Navigation Menu')
@@ -19,9 +25,11 @@ def display_menu():
 
 # Function to navigate back to the menu
 def go_to_menu():
-    display_menu()
+    # Show the banner and menu again
+    st.markdown("<style>div.css-1l02zno{visibility:visible;}</style>", unsafe_allow_html=True)
+    display_banner_and_menu()
 
 # Display the banner and menu by default
-# You can customize this section further based on your requirements
-banner_image = st.image("Confiabilidad_imagen.jpeg", use_column_width=True)
+banner_image = display_banner_and_menu()
+# Display the menu
 display_menu()
