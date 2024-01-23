@@ -72,10 +72,6 @@ def plot_scatter_with_regression_and_histograms(x, y):
     return g
 
 def display_app():
-    # Show the banner, app name
-    banner_image = Image.open("Confiabilidad_imagen.jpeg")
-    st.image(banner_image, use_column_width=True)
-
     st.title("Correlation app")
 
     # Sidebar for user input
