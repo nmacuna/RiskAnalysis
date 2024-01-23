@@ -58,7 +58,7 @@ def plot_probability_distribution(distribution_type, params, title):
     fig.suptitle(title)
     return fig
 
-def app2():
+def display_app2():
     # Banner image
     banner_image = Image.open("Confiabilidad_imagen.jpeg")  # Reemplaza con la ruta real de tu imagen
     st.image(banner_image, use_column_width=True)
@@ -86,4 +86,8 @@ def app2():
     # Graficar la distribución de probabilidad (PDF y CDF)
     fig = plot_probability_distribution(distribution_type, params, distribution_type)
     st.pyplot(fig)
+
+    # Add button to return to the main menu
+    if st.button("Back to Menu"):
+        st.experimental_rerun()
 
