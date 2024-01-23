@@ -18,8 +18,6 @@ def main():
 
     st.title("Reliability and Risk Analysis - Visual Resources")
 
-    st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
-
     # Get the current page name from the URL
     page = st.experimental_get_query_params().get("page", [""])[0]
 
@@ -42,6 +40,8 @@ def main():
             distribution_app.display_app()
         elif page == "random":
             random_app.display_app()
+
+    st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
 
 if __name__ == "__main__":
     main()
