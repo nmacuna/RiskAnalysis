@@ -7,9 +7,9 @@ Created on Sun Jan 21 15:43:45 2024
 # main.py
 import streamlit as st
 from PIL import Image
-import correlation_app as app1
-import ProbabilityDistribution_app as app2
-import random_app as app3
+import correlation_app
+import ProbabilityDistribution_app
+import random_app
 
 def main():
     # Show the banner, app title
@@ -27,11 +27,11 @@ def main():
     if selected_app == "Home":
         display_home()
     elif selected_app == "Correlation":
-        app1.display_app()
+        correlation_app.display_app()
     elif selected_app == "Probability Distribution":
-        app2.display_app()
+        distribution_app.display_app()
     elif selected_app == "Random":
-        app3.display_app()
+        random_app.display_app()
 
 def display_home():
     st.write("Welcome to the main app!")
