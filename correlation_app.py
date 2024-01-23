@@ -72,20 +72,19 @@ def plot_scatter_with_regression_and_histograms(x, y):
     return g
 
 def display_app():
-    # Show the banner, app title
-    banner_image = Image.open("Confiabilidad_imagen.jpeg")
-    st.image(banner_image, use_column_width=True)
 
+    # Button to return to the main page
+    if st.button("Back to Main"):
+        st.experimental_set_query_params(page="")
+        
     st.title("Reliability and Risk Analysis - Visual Resources")
-
-    st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
-
+    
     # Sidebar for user input
-    correlation_value = st.slider("Correlation XY", -1.0, 1.0, 0.0, step=0.1)
-    mean_x = st.slider("Mean variable X", -10.0, 10.0, 0.0, step=0.1)
-    std_dev_x = st.slider("Standard Deviation variable X", 0.1, 10.0, 1.0, step=0.1)
-    mean_y = st.slider("Mean variable Y", -10.0, 10.0, 0.0, step=0.1)
-    std_dev_y = st.slider("Standard Deviation variable Y", 0.1, 10.0, 1.0, step=0.1)
+    correlation_value = st.sidebar.slider("Correlation XY", -1.0, 1.0, 0.0, step=0.1)
+    mean_x = st.sidebar.slider("Mean variable X", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_x = st.sidebar.slider("Standard Deviation variable X", 0.1, 10.0, 1.0, step=0.1)
+    mean_y = st.sidebar.slider("Mean variable Y", -10.0, 10.0, 0.0, step=0.1)
+    std_dev_y = st.sidebar.slider("Standard Deviation variable Y", 0.1, 10.0, 1.0, step=0.1)
 
     # Generate data with correlation, mean, and standard deviation
     data_size = 100
@@ -98,6 +97,11 @@ def display_app():
     # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
     fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
     st.pyplot(fig_scatter)
+    
 
     st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
 
+
+if __name__ == "__main__":
+    display_app()
+    
