@@ -113,3 +113,7 @@ def display_app3():
 
     # Mostrar la figura en Streamlit
     st.pyplot(fig)
+
+    # Add button to return to the main menu
+    if st.button("Back to Menu"):
+        st.experimental_rerun()
