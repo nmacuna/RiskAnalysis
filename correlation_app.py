@@ -49,7 +49,7 @@ def plot_scatter_with_regression(x, y, cov):
 
 def plot_scatter_with_regression_and_histograms(x, y):
     # Create a DataFrame for Seaborn
-    df = pd.DataFrame({'X': x, 'Y': y})
+    df = pd.DataFrame({'Variable X': x, 'variable Y': y})
 
     # Create a jointplot without the regression line
     sns.set(style="white", color_codes=True)
