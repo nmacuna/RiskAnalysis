@@ -101,5 +101,3 @@ def display_app():
 
     st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
 
-if __name__ == "__main__":
-    display_app()
