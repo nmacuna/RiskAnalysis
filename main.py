@@ -23,7 +23,7 @@ def main():
 
     # If no page is specified, show the selection menu
     if not page:
-        selected_app = st.slider("Select App", ["Correlation", "Probability Distribution", "Random"])
+        selected_app = st.slider.radio("Select App", ["Correlation", "Probability Distribution", "Random"])
 
         # Display selected app content
         if selected_app == "Correlation":
