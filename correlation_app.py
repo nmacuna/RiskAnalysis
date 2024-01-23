@@ -72,11 +72,11 @@ def plot_scatter_with_regression_and_histograms(x, y):
     return g
 
 def display_app1():
+    st.title("Correlation explorer between two variables")
 
     # Add button to return to the main menu
     if st.button("Back to Menu"):
         st.markdown("_Go back to the main menu._")
-        st.experimental_rerun()
 
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
@@ -97,4 +97,4 @@ def display_app1():
     fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
     st.pyplot(fig_scatter)
 
-st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
+    st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
