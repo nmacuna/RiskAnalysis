@@ -5,14 +5,13 @@ Created on Sun Jan 21 15:43:45 2024
 @author: nm.acuna
 """
 
-# app1.py
-# app1.py
+# correlation_app.py
 import streamlit as st
 from PIL import Image
-from scipy.stats import linregress
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from scipy.stats import linregress
 import pandas as pd
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
@@ -72,11 +71,14 @@ def plot_scatter_with_regression_and_histograms(x, y):
 
     return g
 
-def app1():
-    # Hide the banner and navigation menu
-    st.markdown("<style>div.css-1l02zno{visibility:hidden;}</style>", unsafe_allow_html=True)
+def display_app1():
+    # Show the banner, app name, and navigation menu
+    banner_image = Image.open("Confiabilidad_imagen.jpeg")
+    st.image(banner_image, use_column_width=True)
 
-    st.title("Confiabilidad y análisis de riesgo  Visualizador de correlación")
+    st.title("Reliability and Risk Analysis - Visual Resources")
+
+    st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
 
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlación XY", -1.0, 1.0, 0.0, step=0.1)
@@ -97,5 +99,6 @@ def app1():
     fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
     st.pyplot(fig_scatter)
 
-    # Add "Back to Menu" button
-    st.button('Back to Menu', on_click=go_to_menu)
+    # Add button to return to the main menu
+    if st.button("Back to Menu"):
+        st.experimental_rerun()
