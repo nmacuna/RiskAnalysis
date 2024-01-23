@@ -96,3 +96,6 @@ def app1():
     # Plot the scatter plot with regression line, r^2, covariance, and correlation coefficient
     fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
     st.pyplot(fig_scatter)
+
+    # Add "Back to Menu" button
+    st.button('Back to Menu', on_click=go_to_menu)
