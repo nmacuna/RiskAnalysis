@@ -75,8 +75,6 @@ def display_app1():
     # app name
     st.title("Correlation explorer between two variables")
 
-    st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
-
     # Add button to return to the main menu
     if st.button("Back to Menu"):
         st.experimental_rerun()
