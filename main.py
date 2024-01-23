@@ -7,9 +7,9 @@ Created on Sun Jan 21 15:43:45 2024
 # main.py
 import streamlit as st
 from PIL import Image
-from correlation_app import app1
-from ProbabilityDistribution_app import app2
-from random_app import app3
+import correlation_app as app1
+import ProbabilityDistribution_app as app2
+import random_app as app3
 
 def main():
     # Show the banner, app name, and navigation menu
