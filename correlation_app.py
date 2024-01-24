@@ -102,10 +102,6 @@ def display_app():
     fig_scatter = plot_scatter_with_regression(x_data, y_data, covariance_matrix)
     st.pyplot(fig_scatter)
     
-
-    st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
-
-
 if __name__ == "__main__":
     display_app()
 
