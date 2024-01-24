@@ -10,6 +10,7 @@ from PIL import Image
 import correlation_app
 import ProbabilityDistribution_app
 import random_app
+from session_state import get
 
 def main():
     # Show the banner, app title, and intellectual property description
