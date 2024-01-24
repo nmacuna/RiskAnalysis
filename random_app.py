@@ -39,7 +39,7 @@ def ajustar_distribucion(datos, tipo_distribucion):
 
     fig, ax = plt.subplots()
 
-    n, bins, patches = plt.hist(datos, bins=30, color='blue', alpha=0.7, density=True, label='Datos Generados')
+    n, bins, patches = plt.hist(datos, bins=30, color='blue', alpha=0.7, density=True, label='Generated data')
 
     x = np.linspace(min(datos), max(datos), 100)
 
@@ -57,7 +57,7 @@ def ajustar_distribucion(datos, tipo_distribucion):
     elif tipo_distribucion == 'uniform':
         y = uniform.pdf(x, loc=loc, scale=scale)
 
-    plt.plot(x, y, 'r-', label=f'Distribución {tipo_distribucion} ajustada')
+    plt.plot(x, y, 'r-', label=f'Adjusted {tipo_distribucion} distribution')
     plt.legend()
 
     # Move the parameters and statistics to the sidebar
