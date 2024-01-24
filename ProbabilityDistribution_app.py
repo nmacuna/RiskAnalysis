@@ -92,9 +92,6 @@ def display_app():
     fig = plot_probability_distribution(distribution_type, params, distribution_type)
     st.pyplot(fig)
 
-    # Add button to return to the main menu
-    if st.button("Back to Menu"):
-        st.experimental_rerun()
 
 if __name__ == "__main__":
     display_app()
