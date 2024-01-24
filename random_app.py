@@ -29,7 +29,7 @@ def generar_datos_aleatorios():
         datos = np.random.uniform(np.random.uniform(0, 5), np.random.uniform(5, 10), 1000)
     else:
         st.error(f"Error: Distribución no reconocida - {distribucion_elegida}")
-        datos = np.random.normal(0, 1, 1000)  
+        datos = np.random.normal(0, 1, 1000)
         distribucion_elegida = 'normal'
     
     return datos, distribucion_elegida
@@ -66,18 +66,19 @@ def ajustar_distribucion(datos, tipo_distribucion):
     st.write(f"Scale: {round(scale, 3)}")
 
     st.subheader("Estadísticas:")
-    st.write(f"Media: {round(np.mean(datos), 3)}")
-    st.write(f"Mediana: {round(np.median(datos), 3)}")
-    st.write(f"Moda: {round(float(mode(datos).mode[0]) if len(mode(datos).mode) > 0 else 'No hay moda', 3)}")
-    st.write(f"Desviación Estándar: {round(np.std(datos), 3)}")
-    st.write(f"Varianza: {round(np.var(datos), 3)}")
-    st.write(f"Coeficiente de Variación: {round(np.std(datos) / np.mean(datos), 3)}")
-    st.write(f"Percentil 25: {round(np.percentile(datos, 25), 3)}")
-    st.write(f"Percentil 75: {round(np.percentile(datos, 75), 3)}")
-    st.write(f"Rango Interquartílico (IQR): {round(np.percentile(datos, 75) - np.percentile(datos, 25), 3)}")
-    st.write(f"Coeficiente de Asimetría: {round(float(skew(datos)), 3)}")
-    st.write(f"Curtosis: {round(float(kurtosis(datos)), 3)}")
-    st.write(f"Entropía: {round(float(entropy(datos)), 3)}")
+    st.sidebar.subheader("Estadísticas:")
+    st.sidebar.write(f"Media: {round(np.mean(datos), 3)}")
+    st.sidebar.write(f"Mediana: {round(np.median(datos), 3)}")
+    st.sidebar.write(f"Moda: {round(float(mode(datos).mode[0]) if len(mode(datos).mode) > 0 else 'No hay moda', 3)}")
+    st.sidebar.write(f"Desviación Estándar: {round(np.std(datos), 3)}")
+    st.sidebar.write(f"Varianza: {round(np.var(datos), 3)}")
+    st.sidebar.write(f"Coeficiente de Variación: {round(np.std(datos) / np.mean(datos), 3)}")
+    st.sidebar.write(f"Percentil 25: {round(np.percentile(datos, 25), 3)}")
+    st.sidebar.write(f"Percentil 75: {round(np.percentile(datos, 75), 3)}")
+    st.sidebar.write(f"Rango Interquartílico (IQR): {round(np.percentile(datos, 75) - np.percentile(datos, 25), 3)}")
+    st.sidebar.write(f"Coeficiente de Asimetría: {round(float(skew(datos)), 3)}")
+    st.sidebar.write(f"Curtosis: {round(float(kurtosis(datos)), 3)}")
+    st.sidebar.write(f"Entropía: {round(float(entropy(datos)), 3)}")
 
     # Añadir botón para descargar los datos generados
     if st.button("Descargar Datos Generados"):
