@@ -22,7 +22,7 @@ def main():
 
     # Display buttons to navigate to each app
     if st.button("Correlation App"):
-        st.experimental_set_query_params(page="correlation")
+        st.components.v1.iframe("http://localhost:8501/correlation_app")  # Cambia la URL base según tu configuración
 
     if st.button("Probability Distribution App"):
         st.experimental_set_query_params(page="distribution")
