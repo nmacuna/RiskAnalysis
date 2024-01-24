@@ -41,7 +41,7 @@ def main():
     if session_state.page == "correlation_app":
         correlation_app.display_app()
     elif session_state.page == "distribution_app":
-        distribution_app.display_app()
+        ProbabilityDistribution_app.display_app()
     elif session_state.page == "random_app":
         random_app.display_app()
 
