@@ -27,23 +27,26 @@ def main():
     # Display buttons to navigate to each app
     if st.button("Correlation App"):
         session_state.page = "correlation"
-        st.experimental_rerun()
 
     if st.button("Probability Distribution App"):
         session_state.page = "distribution"
-        st.experimental_rerun()
 
     if st.button("Random App"):
         session_state.page = "random"
-        st.experimental_rerun()
 
-    # Load the content of the selected app
+    # Load the content of the selected app or show the menu
     if session_state.page == "correlation":
         correlation_app.run()
     elif session_state.page == "distribution":
         distribution_app.run()
     elif session_state.page == "random":
         random_app.run()
+    else:
+        # Display the menu only if none of the app buttons is pressed
+        st.write("Select App:")
+        st.button("Correlation App")
+        st.button("Probability Distribution App")
+        st.button("Random App")
 
 if __name__ == "__main__":
     main()
