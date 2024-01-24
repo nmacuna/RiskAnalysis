@@ -58,12 +58,16 @@ def plot_probability_distribution(distribution_type, params, title):
     fig.suptitle(title)
     return fig
 
-def display_app2():
-    # Banner image
-    banner_image = Image.open("Confiabilidad_imagen.jpeg")  # Reemplaza con la ruta real de tu imagen
-    st.image(banner_image, use_column_width=True)
+def display_app():
+    
+    # Get the current page name from the URL
+    session_state = get(page="Probability distribution")
 
-    st.title("Confiabilidad y análisis de riesgo  Visualizador de distribuciones de probabilidad")
+    # Button to return to the main page
+    if st.button("Back to Main"):
+        session_state.page = "main"
+    
+    st.subheader("Visualizador de distribuciones de probabilidad")
 
     # Barra lateral para la entrada del usuario
     distribution_type = st.sidebar.selectbox("Seleccionar Distribución", ["Exponencial", "Lognormal", "Normal"])
@@ -91,3 +95,5 @@ def display_app2():
     if st.button("Back to Menu"):
         st.experimental_rerun()
 
+if __name__ == "__main__":
+    display_app()
