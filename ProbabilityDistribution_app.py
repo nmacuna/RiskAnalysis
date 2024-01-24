@@ -62,7 +62,7 @@ def plot_probability_distribution(distribution_type, params, title):
 def display_app():
     
     # Get the current page name from the URL
-    session_state = get(page="ProbabilityDistribution_app")
+    session_state = get(page="distribution_app")
 
     # Button to return to the main page
     if st.button("Back to Main"):
