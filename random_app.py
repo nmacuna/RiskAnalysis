@@ -90,8 +90,12 @@ def ajustar_distribucion(datos, tipo_distribucion):
     return fig
 
 def display_app3():
-    session_state = get(page="random")
-    st.title("Generación de datos aleatorios y ajuste de distribuciones")
+    session_state = get(page="random_app")
+     # Button to return to the main page
+    if st.button("Back to Main"):
+        session_state.page = "main"
+    
+    st.subheader("Generación de datos aleatorios y ajuste de distribuciones")
     
     # Generar datos aleatorios solo si es la primera ejecución o el botón es presionado
     if "datos_generados" not in st.session_state or st.button("Generar Datos Aleatorios"):
