@@ -13,14 +13,14 @@ from distfit import distfit
 from session_state import get
 
 def generate_random_data():
-    distributions = ['normal', 'lognormal', 'weibull', 'gamma', 'uniform']
+    distributions = ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform']
     chosen_distribution = np.random.choice(distributions)
 
-    if chosen_distribution == 'normal':
+    if chosen_distribution == 'norm':
         data = np.random.normal(np.random.uniform(0, 10), np.random.uniform(1, 3), 1000)
-    elif chosen_distribution == 'lognormal':
+    elif chosen_distribution == 'lognorm':
         data = np.random.lognormal(np.random.uniform(0, 1), np.random.uniform(0.1, 1), 1000)
-    elif chosen_distribution == 'weibull':
+    elif chosen_distribution == 'dweibull':
         data = np.random.weibull(np.random.uniform(1, 5), 1000)
     elif chosen_distribution == 'gamma':
         data = np.random.gamma(np.random.uniform(1, 5), np.random.uniform(1, 2), 1000)
@@ -50,7 +50,7 @@ def fit_distribution(data, distribution_type):
         y = norm.pdf(x, loc=loc, scale=scale)
     elif distribution_type == 'lognorm':
         y = lognorm.pdf(x, s=dfit.model['arg'][0], loc=loc, scale=scale)
-    elif distribution_type == 'weibull':
+    elif distribution_type == 'dweibull':
         y = weibull_min.pdf(x, c=dfit.model['arg'][0], loc=loc, scale=scale)
     elif distribution_type == 'gamma':
         y = gamma.pdf(x, a=dfit.model['arg'][0], loc=loc, scale=scale)
