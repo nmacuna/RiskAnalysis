@@ -12,72 +12,72 @@ from scipy.stats import mode, skew, kurtosis, entropy
 from distfit import distfit
 from session_state import get
 
-def generate_random_data():
-    distributions = ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform']
-    chosen_distribution = np.random.choice(distributions)
+def generar_datos_aleatorios():
+    distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniform']
+    distribucion_elegida = np.random.choice(distribuciones)
 
-    if chosen_distribution == 'norm':
-        data = np.random.normal(np.random.uniform(0, 10), np.random.uniform(1, 3), 1000)
-    elif chosen_distribution == 'lognorm':
-        data = np.random.lognormal(np.random.uniform(0, 1), np.random.uniform(0.1, 1), 1000)
-    elif chosen_distribution == 'dweibull':
-        data = np.random.weibull(np.random.uniform(1, 5), 1000)
-    elif chosen_distribution == 'gamma':
-        data = np.random.gamma(np.random.uniform(1, 5), np.random.uniform(1, 2), 1000)
-    elif chosen_distribution == 'uniform':
-        data = np.random.uniform(np.random.uniform(0, 5), np.random.uniform(5, 10), 1000)
+    if distribucion_elegida == 'normal':
+        datos = np.random.normal(np.random.uniform(0, 10), np.random.uniform(1, 3), 1000)
+    elif distribucion_elegida == 'lognormal':
+        datos = np.random.lognormal(np.random.uniform(0, 1), np.random.uniform(0.1, 1), 1000)
+    elif distribucion_elegida == 'weibull':
+        datos = np.random.weibull(np.random.uniform(1, 5), 1000)
+    elif distribucion_elegida == 'gamma':
+        datos = np.random.gamma(np.random.uniform(1, 5), np.random.uniform(1, 2), 1000)
+    elif distribucion_elegida == 'uniform':
+        datos = np.random.uniform(np.random.uniform(0, 5), np.random.uniform(5, 10), 1000)
     else:
-        st.error(f"Error: Unrecognized Distribution - {chosen_distribution}")
-        data = np.random.normal(0, 1, 1000)  # Default to normal distribution
-        chosen_distribution = 'normal'
+        st.error(f"Error: Distribución no reconocida - {distribucion_elegida}")
+        datos = np.random.normal(0, 1, 1000)
+        distribucion_elegida = 'normal'
     
-    return data, chosen_distribution
+    return datos, distribucion_elegida
 
-def fit_distribution(data, distribution_type):
-    dfit = distfit(todf=True, distr=distribution_type)
-    dfit.fit_transform(data)
+def ajustar_distribucion(datos, tipo_distribucion):
+    dfit = distfit(todf=True, distr=tipo_distribucion)
+    dfit.fit_transform(datos)
 
     fig, ax = plt.subplots()
 
-    n, bins, patches = plt.hist(data, bins=30, color='blue', alpha=0.7, density=True, label='Generated Data')
+    n, bins, patches = plt.hist(datos, bins=30, color='blue', alpha=0.7, density=True, label='Datos Generados')
 
-    x = np.linspace(min(data), max(data), 100)
+    x = np.linspace(min(datos), max(datos), 100)
 
     loc = dfit.model['loc']
     scale = dfit.model['scale']
 
-    if distribution_type == 'norm':
+    if tipo_distribucion == 'norm':
         y = norm.pdf(x, loc=loc, scale=scale)
-    elif distribution_type == 'lognorm':
+    elif tipo_distribucion == 'lognorm':
         y = lognorm.pdf(x, s=dfit.model['arg'][0], loc=loc, scale=scale)
-    elif distribution_type == 'dweibull':
+    elif tipo_distribucion == 'dweibull':
         y = weibull_min.pdf(x, c=dfit.model['arg'][0], loc=loc, scale=scale)
-    elif distribution_type == 'gamma':
+    elif tipo_distribucion == 'gamma':
         y = gamma.pdf(x, a=dfit.model['arg'][0], loc=loc, scale=scale)
-    elif distribution_type == 'uniform':
+    elif tipo_distribucion == 'uniform':
         y = uniform.pdf(x, loc=loc, scale=scale)
 
-    plt.plot(x, y, 'r-', label=f'Fitted {distribution_type} Distribution')
+    plt.plot(x, y, 'r-', label=f'Distribución {tipo_distribucion} ajustada')
     plt.legend()
 
-    st.subheader("Fitted Distribution Parameters:")
-    st.write(f"Loc: {round(loc, 3)}")
-    st.write(f"Scale: {round(scale, 3)}")
+    # Move the parameters and statistics to the sidebar
+    st.sidebar.subheader("Parámetros de la Distribución Ajustada:")
+    st.sidebar.write(f"Loc: {round(loc, 3)}")
+    st.sidebar.write(f"Scale: {round(scale, 3)}")
 
-    st.subheader("Statistics:")
-    st.sidebar.subheader("Statistics:")
-    st.sidebar.write(f"Mean: {round(np.mean(data), 3)}")
-    st.sidebar.write(f"Median: {round(np.median(data), 3)}")
-    st.sidebar.write(f"Mode: {round(float(mode(data).mode[0]) if len(mode(data).mode) > 0 else 'No mode', 3)}")
-    st.sidebar.write(f"Standard Deviation: {round(np.std(data), 3)}")
-    st.sidebar.write(f"Variance: {round(np.var(data), 3)}")
-    st.sidebar.write(f"Coefficient of Variation: {round(np.std(data) / np.mean(data), 3)}")
-    st.sidebar.write(f"25th Percentile: {round(np.percentile(data, 25), 3)}")
-    st.sidebar.write(f"75th Percentile: {round(np.percentile(data, 75), 3)}")
-    st.sidebar.write(f"Interquartile Range (IQR): {round(np.percentile(data, 75) - np.percentile(data, 25), 3)}")
-    st.sidebar.write(f"Skewness: {round(float(skew(data)), 3)}")
-    st.sidebar.write(f"Kurtosis: {round(float(kurtosis(data)), 3)}")
-    st.sidebar.write(f"Entropy: {round(float(entropy(data)), 3)}")
+    st.sidebar.subheader("Estadísticas:")
+    st.sidebar.write(f"Media: {round(np.mean(datos), 3)}")
+    st.sidebar.write(f"Mediana: {round(np.median(datos), 3)}")
+    st.sidebar.write(f"Moda: {round(float(mode(datos).mode[0]) if len(mode(datos).mode) > 0 else 'No hay moda', 3)}")
+    st.sidebar.write(f"Desviación Estándar: {round(np.std(datos), 3)}")
+    st.sidebar.write(f"Varianza: {round(np.var(datos), 3)}")
+    st.sidebar.write(f"Coeficiente de Variación: {round(np.std(datos) / np.mean(datos), 3)}")
+    st.sidebar.write(f"Percentil 25: {round(np.percentile(datos, 25), 3)}")
+    st.sidebar.write(f"Percentil 75: {round(np.percentile(datos, 75), 3)}")
+    st.sidebar.write(f"Rango Interquartílico (IQR): {round(np.percentile(datos, 75) - np.percentile(datos, 25), 3)}")
+    st.sidebar.write(f"Coeficiente de Asimetría: {round(float(skew(datos)), 3)}")
+    st.sidebar.write(f"Curtosis: {round(float(kurtosis(datos)), 3)}")
+    st.sidebar.write(f"Entropía: {round(float(entropy(datos)), 3)}")
 
     return fig
 
@@ -87,29 +87,14 @@ def display_app():
     if return_to_main_button:
         session_state.page = "main"
     
-    st.subheader("Random Data Generation and Distribution Fitting")
+    st.subheader("Generación de datos aleatorios y ajuste de distribuciones")
     
-    distribution_type = st.sidebar.selectbox("Select distribution type for fitting", ['normal', 'lognormal', 'weibull', 'gamma', 'uniform'])
+    if "datos_generados" not in st.session_state or st.button("Generar Datos Aleatorios"):
+        st.session_state.datos_generados, st.session_state.tipo_distribucion = generar_datos_aleatorios()
+
+    tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
     
-    params = {}
-    
-    if distribution_type == 'normal' or distribution_type == 'lognormal':
-        params['mean'] = st.sidebar.slider("Mean", -10.0, 10.0, 0.0, step=0.1)
-        params['std_dev'] = st.sidebar.slider("Standard Deviation", 0.1, 10.0, 1.0, step=0.1)
-    elif distribution_type == 'weibull':
-        params['shape'] = st.sidebar.slider("Shape", 1.0, 5.0, 2.0, step=0.1)
-    elif distribution_type == 'gamma':
-        params['shape'] = st.sidebar.slider("Shape", 1.0, 5.0, 2.0, step=0.1)
-        params['scale'] = st.sidebar.slider("Scale", 1.0, 5.0, 2.0, step=0.1)
-    elif distribution_type == 'uniform':
-        params['lower_bound'] = st.sidebar.slider("Lower Bound (a)", 0.0, 5.0, 0.0, step=0.1)
-        params['upper_bound'] = st.sidebar.slider("Upper Bound (b)", 5.0, 10.0, 10.0, step=0.1)
-
-    if "generated_data" not in st.session_state or st.button("Generate Random Data"):
-        st.session_state.generated_data, st.session_state.distribution_type = generate_random_data()
-
-    fig = fit_distribution(st.session_state.generated_data, distribution_type)
-
+    fig = ajustar_distribucion(st.session_state.datos_generados, tipo_distribucion)
     st.pyplot(fig)
 
 if __name__ == "__main__":
