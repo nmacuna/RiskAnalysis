@@ -74,7 +74,7 @@ def plot_scatter_with_regression_and_histograms(x, y):
 
 def display_app():
     # Get the current page name from the URL
-    session_state = get(page="correlation")
+    session_state = get(page="correlation_app")
 
     # Button to return to the main page
     if st.button("Back to Main"):
