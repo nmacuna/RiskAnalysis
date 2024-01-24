@@ -13,6 +13,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
 import pandas as pd
+from session_state import get
 
 def generate_correlated_data(size, correlation, mean_x, std_dev_x, mean_y, std_dev_y):
     cov = np.array([[std_dev_x**2, correlation * std_dev_x * std_dev_y],
@@ -72,12 +73,15 @@ def plot_scatter_with_regression_and_histograms(x, y):
     return g
 
 def run():
-
+    session_state = get(page="correlation")
+    
     # Button to return to the main page
+    
     if st.button("Back to Main"):
+        session_state.page = "main"
         st.experimental_rerun()
         
-    st.title("Reliability and Risk Analysis - Visual Resources")
+    st.title("Correlation app")
     
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlation XY", -1.0, 1.0, 0.0, step=0.1)
