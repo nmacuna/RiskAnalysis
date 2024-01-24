@@ -22,13 +22,13 @@ def main():
 
     # Display buttons to navigate to each app
     if st.button("Correlation App"):
-        st.components.v1.iframe("http://localhost:8501/correlation_app")  # Cambia la URL base según tu configuración
+        correlation_app.run()
 
     if st.button("Probability Distribution App"):
-        st.experimental_set_query_params(page="distribution")
+        distribution_app.run()
 
     if st.button("Random App"):
-        st.experimental_set_query_params(page="random")
+        random_app.run()
 
 if __name__ == "__main__":
     main()
