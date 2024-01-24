@@ -71,11 +71,11 @@ def plot_scatter_with_regression_and_histograms(x, y):
 
     return g
 
-def display_app():
+def run():
 
     # Button to return to the main page
     if st.button("Back to Main"):
-        st.experimental_set_query_params(page="")
+        st.experimental_rerun()
         
     st.title("Reliability and Risk Analysis - Visual Resources")
     
@@ -103,4 +103,4 @@ def display_app():
 
 
 if __name__ == "__main__":
-    display_app()
+    run()
