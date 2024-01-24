@@ -61,23 +61,24 @@ def ajustar_distribucion(datos, tipo_distribucion):
     plt.legend()
 
     # Move the parameters and statistics to the sidebar
-    st.sidebar.subheader("Parámetros de la Distribución Ajustada:")
+    st.sidebar.subheader("Parameters of the Fitted Distribution:")
     st.sidebar.write(f"Loc: {round(loc, 3)}")
     st.sidebar.write(f"Scale: {round(scale, 3)}")
 
-    st.sidebar.subheader("Estadísticas:")
-    st.sidebar.write(f"Media: {round(np.mean(datos), 3)}")
-    st.sidebar.write(f"Mediana: {round(np.median(datos), 3)}")
-    st.sidebar.write(f"Moda: {round(float(mode(datos).mode[0]) if len(mode(datos).mode) > 0 else 'No hay moda', 3)}")
-    st.sidebar.write(f"Desviación Estándar: {round(np.std(datos), 3)}")
-    st.sidebar.write(f"Varianza: {round(np.var(datos), 3)}")
-    st.sidebar.write(f"Coeficiente de Variación: {round(np.std(datos) / np.mean(datos), 3)}")
-    st.sidebar.write(f"Percentil 25: {round(np.percentile(datos, 25), 3)}")
-    st.sidebar.write(f"Percentil 75: {round(np.percentile(datos, 75), 3)}")
-    st.sidebar.write(f"Rango Interquartílico (IQR): {round(np.percentile(datos, 75) - np.percentile(datos, 25), 3)}")
-    st.sidebar.write(f"Coeficiente de Asimetría: {round(float(skew(datos)), 3)}")
-    st.sidebar.write(f"Curtosis: {round(float(kurtosis(datos)), 3)}")
-    st.sidebar.write(f"Entropía: {round(float(entropy(datos)), 3)}")
+    st.sidebar.subheader("Statistics:")
+    st.sidebar.write(f"Mean: {round(np.mean(datos), 3)}")
+    st.sidebar.write(f"Median: {round(np.median(datos), 3)}")
+    st.sidebar.write(f"Mode: {round(float(mode(datos).mode[0]) if len(mode(datos).mode) > 0 else 'No mode', 3)}")
+    st.sidebar.write(f"Standard Deviation: {round(np.std(datos), 3)}")
+    st.sidebar.write(f"Variance: {round(np.var(datos), 3)}")
+    st.sidebar.write(f"Coefficient of Variation: {round(np.std(datos) / np.mean(datos), 3)}")
+    st.sidebar.write(f"Percentile 25: {round(np.percentile(datos, 25), 3)}")
+    st.sidebar.write(f"Percentile 75: {round(np.percentile(datos, 75), 3)}")
+    st.sidebar.write(f"Interquartile Range (IQR): {round(np.percentile(datos, 75) - np.percentile(datos, 25), 3)}")
+    st.sidebar.write(f"Skewness: {round(float(skew(datos)), 3)}")
+    st.sidebar.write(f"Kurtosis: {round(float(kurtosis(datos)), 3)}")
+    st.sidebar.write(f"Entropy: {round(float(entropy(datos)), 3)}")
+
 
     return fig
 
@@ -87,12 +88,12 @@ def display_app():
     if return_to_main_button:
         session_state.page = "main"
     
-    st.subheader("Generación de datos aleatorios y ajuste de distribuciones")
+    st.subheader("Random Data Generation and Distribution Fitting")
     
-    if "datos_generados" not in st.session_state or st.button("Generar Datos Aleatorios"):
+    if "datos_generados" not in st.session_state or st.button("Generate Random Dat"):
         st.session_state.datos_generados, st.session_state.tipo_distribucion = generar_datos_aleatorios()
 
-    tipo_distribucion = st.selectbox("Seleccionar Tipo de Distribución", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
+    tipo_distribucion = st.selectbox("Select Distribution Type for Fitting", ['norm', 'lognorm', 'dweibull', 'gamma', 'uniform'])
     
     fig = ajustar_distribucion(st.session_state.datos_generados, tipo_distribucion)
     st.pyplot(fig)
