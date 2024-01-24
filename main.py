@@ -20,14 +20,28 @@ def main():
 
     st.markdown("Developed by Mauricio Sánchez-Silva and Nayled Acuña-Coll for the Reliability and Risk Analysis course at Universidad de los Andes")
 
+    # Get the current page name from the URL
+    session_state = get(page="main")
+
     # Display buttons to navigate to each app
     if st.button("Correlation App"):
-        correlation_app.run()
+        session_state.page = "correlation"
+        st.experimental_rerun()
 
     if st.button("Probability Distribution App"):
-        distribution_app.run()
+        session_state.page = "distribution"
+        st.experimental_rerun()
 
     if st.button("Random App"):
+        session_state.page = "random"
+        st.experimental_rerun()
+
+    # Load the content of the selected app
+    if session_state.page == "correlation":
+        correlation_app.run()
+    elif session_state.page == "distribution":
+        distribution_app.run()
+    elif session_state.page == "random":
         random_app.run()
 
 if __name__ == "__main__":
