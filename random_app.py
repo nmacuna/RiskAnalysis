@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm, lognorm, weibull_min, gamma, uniform
 from scipy.stats import mode, skew, kurtosis, entropy
 from distfit import distfit
+from session_state import get
 
 def generar_datos_aleatorios():
     distribuciones = ['normal', 'lognormal', 'weibull', 'gamma', 'uniform']
@@ -89,14 +90,9 @@ def ajustar_distribucion(datos, tipo_distribucion):
     return fig
 
 def display_app3():
-
-    # Banner image
-    banner_image = Image.open("Confiabilidad_imagen.jpeg")
-    st.image(banner_image, use_column_width=True)
-
-    st.title("Confiabilidad y análisis de riesgo   Generación de datos aleatorios y ajuste de distribuciones")
+    session_state = get(page="random")
+    st.title("Generación de datos aleatorios y ajuste de distribuciones")
     
-
     # Generar datos aleatorios solo si es la primera ejecución o el botón es presionado
     if "datos_generados" not in st.session_state or st.button("Generar Datos Aleatorios"):
         st.session_state.datos_generados, st.session_state.distribucion_elegida = generar_datos_aleatorios()
@@ -117,3 +113,6 @@ def display_app3():
     # Add button to return to the main menu
     if st.button("Back to Menu"):
         st.experimental_rerun()
+
+if __name__ == "__main__":
+    display_app()
