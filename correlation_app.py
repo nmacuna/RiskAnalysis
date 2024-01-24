@@ -72,14 +72,12 @@ def plot_scatter_with_regression_and_histograms(x, y):
 
     return g
 
-def run():
+def display_app():
     session_state = get(page="correlation")
     
     # Button to return to the main page
-    
     if st.button("Back to Main"):
         session_state.page = "main"
-        st.experimental_rerun()
         
     st.title("Correlation app")
     
@@ -107,4 +105,4 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    display_app()
