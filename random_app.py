@@ -91,8 +91,8 @@ def ajustar_distribucion(datos, tipo_distribucion):
 
 def display_app():
     session_state = get(page="random_app")
-     # Button to return to the main page
-    if st.button("Back to Main"):
+    return_to_main_button = st.button("Back to Main")
+    if return_to_main_button:
         session_state.page = "main"
     
     st.subheader("Generación de datos aleatorios y ajuste de distribuciones")
