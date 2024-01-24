@@ -25,30 +25,14 @@ def main():
     session_state = get(page="main")
 
     # Display buttons to navigate to each app
-    if st.button("Correlation App"):
-        session_state.page = "correlation"
+    selected_app = st.selectbox("Select App:", ["Correlation App", "Probability Distribution App", "Random App"])
 
-    if st.button("Probability Distribution App"):
-        session_state.page = "distribution"
-
-    if st.button("Random App"):
-        session_state.page = "random"
-
-    # Load the content of the selected app or show the menu
-    if session_state.page == "correlation":
+    if selected_app == "Correlation App":
         correlation_app.display_app()
-    elif session_state.page == "distribution":
+    elif selected_app == "Probability Distribution App":
         distribution_app.display_app()
-    elif session_state.page == "random":
+    elif selected_app == "Random App":
         random_app.display_app()
-    else:
-        display_menu()
-
-def display_menu():
-    st.write("Select App:")
-    st.button("Correlation App")
-    st.button("Probability Distribution App")
-    st.button("Random App")
 
 if __name__ == "__main__":
     main()
