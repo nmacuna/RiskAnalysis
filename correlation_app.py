@@ -73,10 +73,16 @@ def plot_scatter_with_regression_and_histograms(x, y):
     return g
 
 def display_app():
+    # Get the current page name from the URL
     session_state = get(page="correlation")
-        
-    st.title("Correlation app")
-    
+
+    # Button to return to the main page
+    if st.button("Back to Main"):
+        session_state.page = "main"
+
+    # App-specific content for correlation_app.py
+    st.subheader("Correlation App Content")
+
     # Sidebar for user input
     correlation_value = st.sidebar.slider("Correlation XY", -1.0, 1.0, 0.0, step=0.1)
     mean_x = st.sidebar.slider("Mean variable X", -10.0, 10.0, 0.0, step=0.1)
@@ -102,3 +108,4 @@ def display_app():
 
 if __name__ == "__main__":
     display_app()
+
