@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats
 from PIL import Image
 import math
+from session_state import get
 
 def exponential_custom_pdf(x, rate):
     return stats.expon.pdf(x, scale=1/rate)
@@ -61,7 +62,7 @@ def plot_probability_distribution(distribution_type, params, title):
 def display_app():
     
     # Get the current page name from the URL
-    session_state = get(page="Probability distribution")
+    session_state = get(page="ProbabilityDistribution_app")
 
     # Button to return to the main page
     if st.button("Back to Main"):
