@@ -76,8 +76,8 @@ def display_app():
     # Get the current page name from the URL
     session_state = get(page="correlation_app")
 
-    # Button to return to the main page
-    if st.button("Back to Main"):
+    return_to_main_button = st.button("Back to Main")
+    if return_to_main_button:
         session_state.page = "main"
 
     # App-specific content for correlation_app.py
