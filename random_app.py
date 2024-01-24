@@ -89,7 +89,7 @@ def ajustar_distribucion(datos, tipo_distribucion):
 
     return fig
 
-def display_app3():
+def display_app():
     session_state = get(page="random_app")
      # Button to return to the main page
     if st.button("Back to Main"):
@@ -113,10 +113,6 @@ def display_app3():
 
     # Mostrar la figura en Streamlit
     st.pyplot(fig)
-
-    # Add button to return to the main menu
-    if st.button("Back to Menu"):
-        st.experimental_rerun()
 
 if __name__ == "__main__":
     display_app()
